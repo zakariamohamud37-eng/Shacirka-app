@@ -4,11 +4,11 @@ android {
     namespace = "app.shacirka.dashboard"
     compileSdk = rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "app.shacirka.dashboard"
+        applicationId "app.shacirka.dashboard.redmi"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 2
-        versionName "1.0.1"
+        versionCode 3
+        versionName "1.0.2-redmi"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
             ignoreAssetsPattern = '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
