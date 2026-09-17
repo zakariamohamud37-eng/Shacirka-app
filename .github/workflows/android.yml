@@ -4,6 +4,8 @@ on:
   workflow_dispatch:
   push:
     branches: [redmi-compat]
+  pull_request:
+    branches: [shacirka-mobile]
 
 jobs:
   build:
