@@ -1,22 +1,21 @@
-name: Build Shacirka stable Android release
+name: Build Redmi compatibility APK
 
 on:
   workflow_dispatch:
   push:
-    branches: [shacirka-mobile]
+    branches: [redmi-compat]
 
 jobs:
-  release:
+  build:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: read
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-          cache: npm
 
       - uses: actions/setup-java@v4
         with:
@@ -28,79 +27,15 @@ jobs:
           packages: 'platform-tools platforms;android-36 build-tools;35.0.0'
           log-accepted-android-sdk-licenses: false
 
-      - run: npm ci
+      - run: npm install
       - run: npm run sync
 
-      - name: Build unsigned release APK
+      - name: Build Android 6+ unsigned release APK
         run: bash ./gradlew assembleRelease
         working-directory: android
 
-      - name: Generate permanent signing key and sign APK
-        shell: bash
-        run: |
-          set -euo pipefail
-          SIGNING_PASSWORD="$(openssl rand -base64 36 | tr -d '\n' | tr '/+' '_-')"
-          printf '%s' "$SIGNING_PASSWORD" > signing-password.txt
-          keytool -genkeypair -v \
-            -keystore Shacirka-release.keystore \
-            -storepass "$SIGNING_PASSWORD" \
-            -keypass "$SIGNING_PASSWORD" \
-            -alias shacirka \
-            -keyalg RSA -keysize 4096 -validity 10000 \
-            -dname "CN=Shacirka, OU=Mobile App, O=Shacirka, L=Mogadishu, ST=Banaadir, C=SO"
-          "$ANDROID_HOME/build-tools/35.0.0/apksigner" sign \
-            --ks Shacirka-release.keystore \
-            --ks-key-alias shacirka \
-            --ks-pass "pass:$SIGNING_PASSWORD" \
-            --key-pass "pass:$SIGNING_PASSWORD" \
-            --out Shacirka-v1.0.0.apk \
-            android/app/build/outputs/apk/release/app-release-unsigned.apk
-          "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --verbose --print-certs Shacirka-v1.0.0.apk
-          sha256sum Shacirka-v1.0.0.apk > Shacirka-v1.0.0.sha256
-
-      - name: Encrypt signing-key backup for owner
-        shell: bash
-        run: |
-          set -euo pipefail
-          cat > backup-public.b64 <<'EOF'
-          LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUlJQ0lqQU5CZ2txaGtpRzl3MEJBUUVGQUFPQ0FnOEFNSUlDQ2dLQ0FnRUFvN1ZScFNFeUdIdGNYSFVJdjhlMwovY0l4N21GbDdrYVdTTi9aZXZQWVRDWC9pM3NSUy9xWTdYMWpOMjhPYzQzWS9LU25NR1J0WDd4MjFMemxtZm1mCkJlelZHa2ZnaVFPaXY4V2NCNW15ZWh6em5ickpjU0RDK3Rzd3R1NW1nSmNjYUwyQ1FZcm5FNWV5QXhVN0pCZm4KNWo5UkZFSW9Bck9yOHZVcWdRYmVPLzExWDZIek9CS1VUWUlRQnJOWE9nV1hqVWpIYkZCdnYxcytLdUpNTi94SAprSWMydC94N0dqLzBxdkwrZUhpWG1XZmdUNWxtaTIxbE11eUhpRkRFdHo4M3YrclRyZGdvN0tyeG1xWTBGOFJFCk1QY0IybDhSMUVpVUNZUU1McXl1M003K01mOEtybTlpT0dQb09sWCtuV2dIeVhHOEV1RGxUcmlDOXZPMGNVMGYKaDV5YWlGTzBZYUZMWXpSTCtEQnN0RDZMandaSndYL3p2NHd2eFBmRlp5U0YwanZuUGk2Q29Va0lyc3R6V3JOcQpWeDdPb2ptN2VJN2lsV0tLWGM0RE0yTTJVSTg3TEFXVDQrcTJwKytOaWpyL0ZNcnRrZG9GMXlrTGE1Z3V1bmFMCjdZZlArRGcxMFRBNW52ZWtoWHZQb0RnUmZ4R1UzaWFmNGF6VHdXSWJXckVuRXJaZFdzbS9jR0M3aXRkQ0kxSTEKU204dXRJbnJUV1NNaDJtQ2dwSGhFMXJ2TERNenU4UFJLM3NXd2RiaDZzcHo3bTFoN0w2OXFtOUMwYlMySXBpdwpkMTRmc2FkTzRrd0FoMjNJUjliVzZPY2JLRmFpWkJxSUhMTDBJeDJHUkU0amJZc3cwcVJiellQS2Yzd3Z0UkJjCm91Z3hqc29VbE5BUHpGcStOeVA0TlFrQ0F3RUFBUT09Ci0tLS0tRU5EIFBVQkxJQyBLRVktLS0tLQo=
-          EOF
-          tr -d '[:space:]' < backup-public.b64 | base64 -d > backup-public.pem
-          tar -czf signing-backup.tar.gz Shacirka-release.keystore signing-password.txt
-          BACKUP_PASS="$(openssl rand -hex 32)"
-          printf '%s' "$BACKUP_PASS" > backup-pass.txt
-          openssl enc -aes-256-cbc -salt -pbkdf2 -iter 200000 \
-            -pass file:backup-pass.txt \
-            -in signing-backup.tar.gz \
-            -out Shacirka-signing-backup.enc
-          openssl pkeyutl -encrypt -pubin -inkey backup-public.pem \
-            -pkeyopt rsa_padding_mode:oaep \
-            -pkeyopt rsa_oaep_md:sha256 \
-            -in backup-pass.txt \
-            -out Shacirka-signing-backup-key.enc
-          rm -f signing-backup.tar.gz backup-pass.txt backup-public.pem backup-public.b64
-
-      - name: Upload encrypted signing backup
-        uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4
         with:
-          name: Shacirka-signing-backup-encrypted
-          path: |
-            Shacirka-signing-backup.enc
-            Shacirka-signing-backup-key.enc
+          name: Shacirka-v1.0.1-redmi-unsigned
+          path: android/app/build/outputs/apk/release/app-release-unsigned.apk
           retention-days: 14
-
-      - name: Publish public GitHub release
-        env:
-          GH_TOKEN: ${{ github.token }}
-        shell: bash
-        run: |
-          set -euo pipefail
-          if gh release view v1.0.0 >/dev/null 2>&1; then
-            gh release upload v1.0.0 Shacirka-v1.0.0.apk Shacirka-v1.0.0.sha256 --clobber
-          else
-            gh release create v1.0.0 \
-              Shacirka-v1.0.0.apk Shacirka-v1.0.0.sha256 \
-              --target "$GITHUB_SHA" \
-              --title "Shacirka v1.0.0" \
-              --notes "Shacirka Android stable release. Download Shacirka-v1.0.0.apk and install it on Android."
-          fi
