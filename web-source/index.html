@@ -354,6 +354,27 @@ button{font-family:var(--font-b);cursor:pointer;}
 .segmented button.active{background:var(--primary);border-color:var(--primary);color:#fff;}
 .modal-actions{display:flex;gap:10px;margin-top:20px;}
 .modal-actions .btn{flex:1;justify-content:center;}
+.pdf-box{border:1px dashed var(--border);background:var(--surface-2);border-radius:14px;padding:12px;display:flex;align-items:center;gap:11px;min-height:68px;}
+.pdf-file-icon{width:40px;height:40px;border-radius:11px;background:var(--danger-pale);color:var(--danger);font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.pdf-file-info{min-width:0;flex:1;}
+.pdf-file-name{font-size:12.5px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.pdf-file-meta,.pdf-empty-text{font-size:10.5px;color:var(--ink-3);margin-top:2px;line-height:1.35;}
+.pdf-empty-title{font-size:12.5px;font-weight:800;color:var(--ink-2);}
+.pdf-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;}
+.pdf-action{border:1px solid var(--border);background:var(--surface);color:var(--ink-2);border-radius:9px;padding:6px 9px;font-size:10.5px;font-weight:800;}
+.pdf-action.primary{background:var(--primary);border-color:var(--primary);color:#fff;}
+.pdf-action.danger{color:var(--danger);}
+.pdf-upload{border:none;background:var(--primary);color:#fff;border-radius:10px;padding:9px 12px;font-size:11px;font-weight:800;flex-shrink:0;}
+.pdf-reader-overlay{z-index:210;background:rgba(5,10,25,.82);}
+.pdf-reader-panel{max-width:900px;height:min(92vh,900px);padding:0;overflow:hidden;display:flex;flex-direction:column;}
+.pdf-reader-head{display:flex;align-items:center;gap:10px;padding:13px 14px;border-bottom:1px solid var(--border);background:var(--surface);}
+.pdf-reader-title{min-width:0;flex:1;}.pdf-reader-title strong{display:block;font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.pdf-reader-title span{display:block;font-size:10.5px;color:var(--ink-3);margin-top:2px;}
+.pdf-toolbar{display:flex;align-items:center;justify-content:center;gap:8px;padding:9px;background:var(--surface-2);border-bottom:1px solid var(--border);}
+.pdf-tool-btn{border:1px solid var(--border);background:var(--surface);color:var(--ink-2);border-radius:9px;min-width:38px;height:34px;padding:0 10px;font-size:11px;font-weight:800;}
+.pdf-tool-btn:disabled{opacity:.4;cursor:not-allowed}.pdf-page-count{font-size:11px;font-weight:800;color:var(--ink-2);min-width:74px;text-align:center;}
+.pdf-canvas-wrap{flex:1;overflow:auto;background:#CBD5E1;padding:14px;text-align:center;overscroll-behavior:contain;}
+.pdf-canvas-wrap canvas{display:inline-block;background:#fff;box-shadow:0 8px 28px rgba(15,30,60,.22);max-width:none;}
+.pdf-reader-state{font-size:12px;font-weight:700;color:#334155;padding:40px 14px;}
 .schedule-edit-btn{border:none;background:var(--primary-pale);color:var(--primary);font-weight:800;font-size:12px;padding:9px 12px;border-radius:11px}.schedule-edit-btn:hover{background:var(--primary);color:#fff}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.form-grid .full{grid-column:1/-1}.install-btn{width:auto;padding:0 13px;gap:6px;font-size:12px;font-weight:800}.bottom-nav{display:none}
 
 /* Mobile app shell */
@@ -363,6 +384,7 @@ button{font-family:var(--font-b);cursor:pointer;}
  .stats-grid{grid-template-columns:repeat(2,1fr);gap:9px}.stat-card{padding:11px;border-radius:17px;gap:9px}.stat-card:last-child{grid-column:1/-1}.stat-ico{width:36px;height:36px}.stat-value{font-size:18px}.stat-label{font-size:11px}.layout,.main-col,.aside-col{gap:12px}.card{padding:14px;border-radius:20px;box-shadow:0 3px 16px rgba(15,30,60,.06)}.card-title{font-size:15px}.card-sub{font-size:11.5px}.subjects-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.subject-card{padding:11px}.subject-name{font-size:12.5px;line-height:1.25}.subject-sub{font-size:10px}.subject-ico{width:34px;height:34px}.grade-pill{font-size:9.5px}.footer{display:none}.modal-overlay{align-items:flex-end;padding:0}.modal-panel{max-width:none;border-radius:26px 26px 0 0;padding:22px 18px calc(22px + env(safe-area-inset-bottom));transform:translateY(100%)}
  body[data-app-view] .card{display:none}body[data-app-view="home"] .card[data-app-view~="home"],body[data-app-view="schedule"] .card[data-app-view~="schedule"],body[data-app-view="subjects"] .card[data-app-view~="subjects"],body[data-app-view="tasks"] .card[data-app-view~="tasks"],body[data-app-view="plan"] .card[data-app-view~="plan"]{display:block;animation:fadeUp .22s ease both}body[data-app-view="home"] .stats-grid{display:grid}body[data-app-view]:not([data-app-view="home"]) .stats-grid{display:none}.layout{display:block}.main-col,.aside-col{display:contents}
  .bottom-nav{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;z-index:100;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom));height:66px;background:color-mix(in srgb,var(--surface) 94%,transparent);backdrop-filter:blur(18px);border:1px solid var(--border);box-shadow:0 12px 35px rgba(15,30,60,.22);border-radius:22px;padding:7px}.bottom-nav button{border:0;background:transparent;color:var(--ink-3);font-size:9.5px;font-weight:800;border-radius:15px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px}.bottom-nav button span{font-size:19px}.bottom-nav button.active{background:var(--primary-pale);color:var(--primary)}
+ .pdf-reader-overlay{align-items:stretch}.pdf-reader-panel{height:100%;max-height:none;border-radius:0;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom);transform:translateY(100%)}.pdf-canvas-wrap{padding:10px}.pdf-box{align-items:flex-start}.pdf-upload{margin-top:2px}
 }
 
 /* ---------- Footer ---------- */
@@ -616,10 +638,38 @@ button{font-family:var(--font-b);cursor:pointer;}
       <button data-v="progress" type="button">Socda</button>
       <button data-v="done" type="button">La Dhammeeyay</button>
     </div>
+    <label class="modal-label">Buugga PDF-ga</label>
+    <div class="pdf-box">
+      <div class="pdf-file-icon">PDF</div>
+      <div class="pdf-file-info" id="modalPdfInfo">
+        <div class="pdf-empty-title">PDF weli laguma darin</div>
+        <div class="pdf-empty-text">Ku dar PDF-ga maadadan si aad app-ka dhexdiisa uga akhrisato.</div>
+      </div>
+      <button class="pdf-upload" id="modalPdfChooseBtn" type="button">PDF ku dar</button>
+      <input type="file" id="modalPdfInput" accept="application/pdf,.pdf" hidden>
+    </div>
     <div class="modal-actions">
       <button class="btn btn-ghost" id="modalCancelBtn">Jooji</button>
       <button class="btn btn-primary" id="modalSaveBtn">Kaydi</button>
     </div>
+  </div>
+</div>
+
+<div class="modal-overlay pdf-reader-overlay" id="pdfReaderOverlay">
+  <div class="modal-panel pdf-reader-panel">
+    <div class="pdf-reader-head">
+      <div class="pdf-file-icon">PDF</div>
+      <div class="pdf-reader-title"><strong id="pdfReaderFileName">PDF</strong><span id="pdfReaderSubject">Maadada</span></div>
+      <button class="modal-close" id="pdfReaderCloseBtn" aria-label="Xir PDF-ga">✕</button>
+    </div>
+    <div class="pdf-toolbar">
+      <button class="pdf-tool-btn" id="pdfPrevBtn" type="button">Hore</button>
+      <span class="pdf-page-count" id="pdfPageCount">Bog 0 / 0</span>
+      <button class="pdf-tool-btn" id="pdfNextBtn" type="button">Xiga</button>
+      <button class="pdf-tool-btn" id="pdfZoomOutBtn" type="button" aria-label="Yaree">−</button>
+      <button class="pdf-tool-btn" id="pdfZoomInBtn" type="button" aria-label="Weynee">+</button>
+    </div>
+    <div class="pdf-canvas-wrap" id="pdfCanvasWrap"><div class="pdf-reader-state" id="pdfReaderState">PDF-ga ayaa furmaya…</div><canvas id="pdfCanvas" hidden></canvas></div>
   </div>
 </div>
 
@@ -815,6 +865,32 @@ function daysUntil(dateStr){
 function subjIcon(name){ const s = STATE.subjects.find(x=>x.name===name); return s ? s.ico : "📘"; }
 function getTodaySomaliKey(){ return SOM_DAYS[new Date().getDay()]; }
 function uid(prefix){ return prefix+Date.now()+Math.floor(Math.random()*1000); }
+function formatFileSize(bytes){
+  if(bytes<1024)return bytes+" B";
+  if(bytes<1048576)return (bytes/1024).toFixed(1)+" KB";
+  return (bytes/1048576).toFixed(1)+" MB";
+}
+function escapeHtml(value){
+  return String(value??"").replace(/[&<>'"]/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"}[ch]));
+}
+
+/* PDF-yada maadooyinka waxaa lagu kaydiyaa IndexedDB si faylal waaweyn
+   aysan u buuxin localStorage-ka. PDF walba wuxuu u gaar yahay maadadiisa. */
+const PDF_DB_NAME="shacirka-subject-pdfs-v1",PDF_STORE="pdfs";
+function openPdfDb(){
+  return new Promise((resolve,reject)=>{
+    const req=indexedDB.open(PDF_DB_NAME,1);
+    req.onupgradeneeded=()=>{if(!req.result.objectStoreNames.contains(PDF_STORE))req.result.createObjectStore(PDF_STORE,{keyPath:"subject"});};
+    req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error);
+  });
+}
+async function pdfDbAction(mode,action){
+  const db=await openPdfDb();
+  return new Promise((resolve,reject)=>{const tx=db.transaction(PDF_STORE,mode),store=tx.objectStore(PDF_STORE),req=action(store);req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error);tx.oncomplete=()=>db.close();});
+}
+const getSubjectPdf=subject=>pdfDbAction("readonly",store=>store.get(subject));
+const saveSubjectPdf=record=>pdfDbAction("readwrite",store=>store.put(record));
+const deleteSubjectPdf=subject=>pdfDbAction("readwrite",store=>store.delete(subject));
 
 /* ============================================================
    THEME
@@ -941,13 +1017,85 @@ function openSubjectModal(i){
   document.getElementById("modalGradeSelect").value = s.grade;
   document.querySelectorAll("#modalStatusSeg button").forEach(b=> b.classList.toggle("active", b.dataset.v===s.status));
   document.getElementById("subjectModalOverlay").classList.add("open");
+  renderSubjectPdfBox(s.name);
 }
-function closeSubjectModal(){ document.getElementById("subjectModalOverlay").classList.remove("open"); editingIndex=null; }
+function closeSubjectModal(){ document.getElementById("subjectModalOverlay").classList.remove("open"); document.getElementById("modalPdfInput").value=""; editingIndex=null; }
 document.getElementById("modalCloseBtn").addEventListener("click", closeSubjectModal);
 document.getElementById("modalCancelBtn").addEventListener("click", closeSubjectModal);
 document.getElementById("subjectModalOverlay").addEventListener("click", (e)=>{ if(e.target.id==="subjectModalOverlay") closeSubjectModal(); });
 document.getElementById("modalProgressRange").addEventListener("input", function(){ document.getElementById("modalProgressValue").textContent = this.value+"%"; });
 document.querySelectorAll("#modalStatusSeg button").forEach(b=> b.addEventListener("click", function(){ document.querySelectorAll("#modalStatusSeg button").forEach(x=>x.classList.remove("active")); this.classList.add("active"); }));
+document.getElementById("modalPdfChooseBtn").addEventListener("click",()=>document.getElementById("modalPdfInput").click());
+document.getElementById("modalPdfInput").addEventListener("change",async function(){
+  const file=this.files&&this.files[0];if(!file||editingIndex===null)return;
+  if(file.type!=="application/pdf"&&!file.name.toLowerCase().endsWith(".pdf")){alert("Fadlan dooro fayl PDF ah.");this.value="";return;}
+  if(file.size>50*1024*1024){alert("PDF-gu aad buu u weyn yahay. Fadlan dooro mid ka yar 50 MB.");this.value="";return;}
+  const subject=STATE.subjects[editingIndex].name,btn=document.getElementById("modalPdfChooseBtn");
+  btn.disabled=true;btn.textContent="Kaydinaya…";
+  try{
+    await saveSubjectPdf({subject,fileName:file.name,size:file.size,type:"application/pdf",updatedAt:Date.now(),blob:file});
+    if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().catch(()=>{});
+    await renderSubjectPdfBox(subject);
+  }catch(e){console.error(e);alert("PDF-ga lama kaydin. Hubi in boos kayd ah uu telefoonka ku filan yahay.");}
+  finally{btn.disabled=false;btn.textContent="PDF ku dar";this.value="";}
+});
+
+async function renderSubjectPdfBox(subject){
+  const info=document.getElementById("modalPdfInfo"),choose=document.getElementById("modalPdfChooseBtn");
+  info.innerHTML='<div class="pdf-empty-text">Hubinaya PDF-ga…</div>';
+  try{
+    const record=await getSubjectPdf(subject);
+    if(editingIndex===null||STATE.subjects[editingIndex]?.name!==subject)return;
+    if(!record){
+      info.innerHTML='<div class="pdf-empty-title">PDF weli laguma darin</div><div class="pdf-empty-text">Ku dar PDF-ga maadadan si aad app-ka dhexdiisa uga akhrisato.</div>';
+      choose.textContent="PDF ku dar";return;
+    }
+    info.innerHTML=`<div class="pdf-file-name" title="${escapeHtml(record.fileName)}">${escapeHtml(record.fileName)}</div><div class="pdf-file-meta">${formatFileSize(record.size)} · Ku kaydsan maadadan</div><div class="pdf-actions"><button class="pdf-action primary" id="modalPdfReadBtn" type="button">Akhri</button><button class="pdf-action danger" id="modalPdfDeleteBtn" type="button">Ka saar</button></div>`;
+    choose.textContent="Beddel";
+    document.getElementById("modalPdfReadBtn").addEventListener("click",()=>openPdfReader(record));
+    document.getElementById("modalPdfDeleteBtn").addEventListener("click",async()=>{
+      if(!confirm(`Ma hubtaa inaad ka saarayso PDF-ga ${subject}?`))return;
+      await deleteSubjectPdf(subject);await renderSubjectPdfBox(subject);
+    });
+  }catch(e){console.error(e);info.innerHTML='<div class="pdf-empty-title">PDF-ga lama heli karo</div><div class="pdf-empty-text">Mar kale isku day ama hubi kaydka telefoonka.</div>';}
+}
+
+let openPdfDocument=null,pdfPageNumber=1,pdfZoom=1,pdfRenderTask=null;
+async function openPdfReader(record){
+  const overlay=document.getElementById("pdfReaderOverlay"),canvas=document.getElementById("pdfCanvas"),state=document.getElementById("pdfReaderState");
+  document.getElementById("pdfReaderFileName").textContent=record.fileName;
+  document.getElementById("pdfReaderSubject").textContent=record.subject;
+  canvas.hidden=true;state.hidden=false;state.textContent="PDF-ga ayaa furmaya…";overlay.classList.add("open");
+  try{
+    if(!window.ShacirkaPDF)throw new Error("PDF reader lama diyaarin");
+    const data=new Uint8Array(await record.blob.arrayBuffer());
+    openPdfDocument=await window.ShacirkaPDF.getDocument({data}).promise;pdfPageNumber=1;pdfZoom=1;
+    await renderPdfPage();
+  }catch(e){console.error(e);state.hidden=false;state.textContent="PDF-gan lama furi karin. Waxaa laga yaabaa inuu dhaawacan yahay ama sir ku xiran yahay.";}
+}
+async function renderPdfPage(){
+  if(!openPdfDocument)return;
+  const canvas=document.getElementById("pdfCanvas"),wrap=document.getElementById("pdfCanvasWrap"),state=document.getElementById("pdfReaderState");
+  state.hidden=false;state.textContent="Bogga ayaa soo baxaya…";canvas.hidden=true;
+  if(pdfRenderTask){try{pdfRenderTask.cancel()}catch(e){}}
+  const page=await openPdfDocument.getPage(pdfPageNumber),base=page.getViewport({scale:1});
+  const fit=Math.max(.45,Math.min(1.65,(wrap.clientWidth-28)/base.width)),viewport=page.getViewport({scale:fit*pdfZoom}),dpr=Math.min(window.devicePixelRatio||1,2);
+  canvas.width=Math.floor(viewport.width*dpr);canvas.height=Math.floor(viewport.height*dpr);canvas.style.width=Math.floor(viewport.width)+"px";canvas.style.height=Math.floor(viewport.height)+"px";
+  const ctx=canvas.getContext("2d",{alpha:false});pdfRenderTask=page.render({canvasContext:ctx,viewport,transform:dpr!==1?[dpr,0,0,dpr,0,0]:null});
+  try{await pdfRenderTask.promise;canvas.hidden=false;state.hidden=true;}catch(e){if(e?.name!=="RenderingCancelledException")throw e;}
+  document.getElementById("pdfPageCount").textContent=`Bog ${pdfPageNumber} / ${openPdfDocument.numPages}`;
+  document.getElementById("pdfPrevBtn").disabled=pdfPageNumber<=1;document.getElementById("pdfNextBtn").disabled=pdfPageNumber>=openPdfDocument.numPages;
+  wrap.scrollTo({top:0,left:0});
+}
+async function closePdfReader(){
+  document.getElementById("pdfReaderOverlay").classList.remove("open");if(pdfRenderTask){try{pdfRenderTask.cancel()}catch(e){}}
+  if(openPdfDocument){try{await openPdfDocument.destroy()}catch(e){}}openPdfDocument=null;pdfRenderTask=null;
+}
+document.getElementById("pdfReaderCloseBtn").addEventListener("click",closePdfReader);
+document.getElementById("pdfPrevBtn").addEventListener("click",()=>{if(pdfPageNumber>1){pdfPageNumber--;renderPdfPage();}});
+document.getElementById("pdfNextBtn").addEventListener("click",()=>{if(openPdfDocument&&pdfPageNumber<openPdfDocument.numPages){pdfPageNumber++;renderPdfPage();}});
+document.getElementById("pdfZoomOutBtn").addEventListener("click",()=>{if(openPdfDocument){pdfZoom=Math.max(.6,pdfZoom-.2);renderPdfPage();}});
+document.getElementById("pdfZoomInBtn").addEventListener("click",()=>{if(openPdfDocument){pdfZoom=Math.min(2.2,pdfZoom+.2);renderPdfPage();}});
 document.getElementById("modalSaveBtn").addEventListener("click", ()=>{
   if(editingIndex===null) return;
   const s = STATE.subjects[editingIndex];

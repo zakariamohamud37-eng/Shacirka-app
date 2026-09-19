@@ -4,25 +4,21 @@ import {App} from '@capacitor/app';
 import {Browser} from '@capacitor/browser';
 import {remindersFor} from './reminders';
 
-const UPDATE_MANIFEST='https://shacirka-app-download.netlify.app/version.json';
+const UPDATE_MANIFEST='https://shacirka-dashboard.netlify.app/version.json';
 let queue=Promise.resolve();
 const run=fn=>{queue=queue.catch(()=>{}).then(fn);return queue;};
 const cancel=async()=>{const {notifications}=await N.getPending();if(notifications.length)await N.cancel({notifications});};
 const newer=(a,b)=>{
   const pa=String(a||'0').split('.').map(n=>parseInt(n,10)||0);
   const pb=String(b||'0').split('.').map(n=>parseInt(n,10)||0);
-  for(let i=0;i<Math.max(pa.length,pb.length);i++){
-    const x=pa[i]||0,y=pb[i]||0;
-    if(x!==y)return x>y;
-  }
+  for(let i=0;i<Math.max(pa.length,pb.length);i++){const x=pa[i]||0,y=pb[i]||0;if(x!==y)return x>y;}
   return false;
 };
 async function sync(state){
   return run(async()=>{
     if(!state.notificationsEnabled){await cancel();return {enabled:false};}
     if((await N.checkPermissions()).display!=='granted')return {enabled:false,denied:true};
-    const result=remindersFor(state);
-    await cancel();
+    const result=remindersFor(state);await cancel();
     if(Capacitor.getPlatform()==='android')await N.createChannel({id:'study',name:'Xusuusinta waxbarashada',importance:4,visibility:1,vibration:true});
     const scheduled=await N.schedule({notifications:result.notifications});
     return {enabled:true,truncated:result.truncated,warning:scheduled.warning};
@@ -35,17 +31,14 @@ async function checkUpdate(force=false){
     if(!force&&now-last<6*60*60*1000)return {skipped:true};
     localStorage.setItem('shacirkaUpdateLastCheck',String(now));
     const [info,res]=await Promise.all([App.getInfo(),fetch(`${UPDATE_MANIFEST}?t=${now}`,{cache:'no-store'})]);
-    if(!res.ok)throw new Error(`HTTP ${res.status}`);
-    const meta=await res.json();
+    if(!res.ok)throw new Error(`HTTP ${res.status}`);const meta=await res.json();
     if(newer(meta.version,info.version)){
       const ok=confirm(`Shacirka ${meta.version} ayaa diyaar ah. Ma rabtaa inaad hadda update-gareyso?`);
       if(ok&&meta.apkUrl)await Browser.open({url:meta.apkUrl});
       return {available:true,current:info.version,latest:meta.version};
     }
     return {available:false,current:info.version,latest:meta.version};
-  }catch(error){
-    return {available:false,error:String(error?.message||error)};
-  }
+  }catch(error){return {available:false,error:String(error?.message||error)};}
 }
 window.ShacirkaNative={
   isNative:Capacitor.isNativePlatform(),sync,checkUpdate,
