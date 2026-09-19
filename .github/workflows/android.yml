@@ -1,19 +1,16 @@
-name: Build and publish Shacirka Android APK
+name: Build Shacirka Android APK
 
 on:
   workflow_dispatch:
   push:
     branches:
       - shacirka-mobile
-  pull_request:
-    branches:
-      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: read
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -29,24 +26,17 @@ jobs:
           packages: 'platform-tools platforms;android-36 build-tools;35.0.0'
           log-accepted-android-sdk-licenses: false
       - name: Install dependencies
-        run: npm install
+        run: npm ci
       - name: Sync app
         run: npm run sync
-      - name: Build installable APK
-        run: ./gradlew assembleDebug
+      - name: Build unsigned release APK
+        run: ./gradlew assembleRelease
         working-directory: android
-      - name: Prepare download file
-        run: cp android/app/build/outputs/apk/debug/app-debug.apk Shacirka.apk
-      - name: Upload build artifact
+      - name: Prepare signing artifact
+        run: cp android/app/build/outputs/apk/release/app-release-unsigned.apk Shacirka-unsigned.apk
+      - name: Upload unsigned APK
         uses: actions/upload-artifact@v4
         with:
-          name: Shacirka-Android-APK
-          path: Shacirka.apk
-          retention-days: 30
-      - name: Publish permanent download
-        if: github.event_name == 'push'
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          gh release view v1.1.0 >/dev/null 2>&1 || gh release create v1.1.0 --target "$GITHUB_SHA" --title "Shacirka v1.1.0" --notes "Shacirka study dashboard for Android. Download Shacirka.apk, then allow installation from your browser if Android asks."
-          gh release upload v1.1.0 Shacirka.apk --clobber
+          name: Shacirka-Unsigned-APK
+          path: Shacirka-unsigned.apk
+          retention-days: 7
