@@ -371,9 +371,13 @@ button{font-family:var(--font-b);cursor:pointer;}
 .pdf-reader-title{min-width:0;flex:1;}.pdf-reader-title strong{display:block;font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.pdf-reader-title span{display:block;font-size:10.5px;color:var(--ink-3);margin-top:2px;}
 .pdf-toolbar{display:flex;align-items:center;justify-content:center;gap:8px;padding:9px;background:var(--surface-2);border-bottom:1px solid var(--border);}
 .pdf-tool-btn{border:1px solid var(--border);background:var(--surface);color:var(--ink-2);border-radius:9px;min-width:38px;height:34px;padding:0 10px;font-size:11px;font-weight:800;}
-.pdf-tool-btn:disabled{opacity:.4;cursor:not-allowed}.pdf-page-count{font-size:11px;font-weight:800;color:var(--ink-2);min-width:74px;text-align:center;}
-.pdf-canvas-wrap{flex:1;overflow:auto;background:#CBD5E1;padding:14px;text-align:center;overscroll-behavior:contain;}
-.pdf-canvas-wrap canvas{display:inline-block;background:#fff;box-shadow:0 8px 28px rgba(15,30,60,.22);max-width:none;}
+.pdf-tool-btn:disabled{opacity:.4;cursor:not-allowed}.pdf-page-count{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:800;color:var(--ink-2);text-align:center;}
+.pdf-page-input{width:52px;height:34px;border:1px solid var(--border);border-radius:9px;background:var(--surface);color:var(--ink);font:800 12px var(--font-b);text-align:center;outline:none}.pdf-page-input:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-pale)}
+.pdf-canvas-wrap{flex:1;overflow:auto;background:#CBD5E1;padding:14px;overscroll-behavior:contain;scroll-behavior:smooth;}
+.pdf-pages{display:flex;flex-direction:column;align-items:flex-start;gap:12px;min-height:100%;}
+.pdf-page-shell{position:relative;flex:none;margin:0 auto;background:#fff;box-shadow:0 8px 28px rgba(15,30,60,.22);overflow:hidden;max-width:none;}
+.pdf-page-shell canvas{display:block;width:100%;height:100%;background:#fff;}
+.pdf-page-loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#64748b;font-size:12px;font-weight:800;background:#f8fafc;}
 .pdf-reader-state{font-size:12px;font-weight:700;color:#334155;padding:40px 14px;}
 .schedule-edit-btn{border:none;background:var(--primary-pale);color:var(--primary);font-weight:800;font-size:12px;padding:9px 12px;border-radius:11px}.schedule-edit-btn:hover{background:var(--primary);color:#fff}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.form-grid .full{grid-column:1/-1}.install-btn{width:auto;padding:0 13px;gap:6px;font-size:12px;font-weight:800}.bottom-nav{display:none}
 
@@ -384,7 +388,7 @@ button{font-family:var(--font-b);cursor:pointer;}
  .stats-grid{grid-template-columns:repeat(2,1fr);gap:9px}.stat-card{padding:11px;border-radius:17px;gap:9px}.stat-card:last-child{grid-column:1/-1}.stat-ico{width:36px;height:36px}.stat-value{font-size:18px}.stat-label{font-size:11px}.layout,.main-col,.aside-col{gap:12px}.card{padding:14px;border-radius:20px;box-shadow:0 3px 16px rgba(15,30,60,.06)}.card-title{font-size:15px}.card-sub{font-size:11.5px}.subjects-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.subject-card{padding:11px}.subject-name{font-size:12.5px;line-height:1.25}.subject-sub{font-size:10px}.subject-ico{width:34px;height:34px}.grade-pill{font-size:9.5px}.footer{display:none}.modal-overlay{align-items:flex-end;padding:0}.modal-panel{max-width:none;border-radius:26px 26px 0 0;padding:22px 18px calc(22px + env(safe-area-inset-bottom));transform:translateY(100%)}
  body[data-app-view] .card{display:none}body[data-app-view="home"] .card[data-app-view~="home"],body[data-app-view="schedule"] .card[data-app-view~="schedule"],body[data-app-view="subjects"] .card[data-app-view~="subjects"],body[data-app-view="tasks"] .card[data-app-view~="tasks"],body[data-app-view="plan"] .card[data-app-view~="plan"]{display:block;animation:fadeUp .22s ease both}body[data-app-view="home"] .stats-grid{display:grid}body[data-app-view]:not([data-app-view="home"]) .stats-grid{display:none}.layout{display:block}.main-col,.aside-col{display:contents}
  .bottom-nav{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;z-index:100;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom));height:66px;background:color-mix(in srgb,var(--surface) 94%,transparent);backdrop-filter:blur(18px);border:1px solid var(--border);box-shadow:0 12px 35px rgba(15,30,60,.22);border-radius:22px;padding:7px}.bottom-nav button{border:0;background:transparent;color:var(--ink-3);font-size:9.5px;font-weight:800;border-radius:15px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px}.bottom-nav button span{font-size:19px}.bottom-nav button.active{background:var(--primary-pale);color:var(--primary)}
- .pdf-reader-overlay{align-items:stretch}.pdf-reader-panel{height:100%;max-height:none;border-radius:0;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom);transform:translateY(100%)}.pdf-canvas-wrap{padding:10px}.pdf-box{align-items:flex-start}.pdf-upload{margin-top:2px}
+ .pdf-reader-overlay{align-items:stretch}.pdf-reader-panel{height:100%;max-height:none;border-radius:0;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom);transform:translateY(100%)}.pdf-canvas-wrap{padding:8px}.pdf-pages{gap:8px}.pdf-toolbar{gap:6px;padding:8px}.pdf-tool-btn{padding:0 9px}.pdf-box{align-items:flex-start}.pdf-upload{margin-top:2px}
 }
 
 /* ---------- Footer ---------- */
@@ -663,13 +667,12 @@ button{font-family:var(--font-b);cursor:pointer;}
       <button class="modal-close" id="pdfReaderCloseBtn" aria-label="Xir PDF-ga">✕</button>
     </div>
     <div class="pdf-toolbar">
-      <button class="pdf-tool-btn" id="pdfPrevBtn" type="button">Hore</button>
-      <span class="pdf-page-count" id="pdfPageCount">Bog 0 / 0</span>
-      <button class="pdf-tool-btn" id="pdfNextBtn" type="button">Xiga</button>
+      <span class="pdf-page-count"><span>Bog</span><input class="pdf-page-input" id="pdfPageInput" type="number" min="1" value="1" inputmode="numeric" aria-label="Lambarka bogga"><span>/ <span id="pdfTotalPages">0</span></span></span>
+      <button class="pdf-tool-btn" id="pdfGoBtn" type="button">Tag</button>
       <button class="pdf-tool-btn" id="pdfZoomOutBtn" type="button" aria-label="Yaree">−</button>
       <button class="pdf-tool-btn" id="pdfZoomInBtn" type="button" aria-label="Weynee">+</button>
     </div>
-    <div class="pdf-canvas-wrap" id="pdfCanvasWrap"><div class="pdf-reader-state" id="pdfReaderState">PDF-ga ayaa furmaya…</div><canvas id="pdfCanvas" hidden></canvas></div>
+    <div class="pdf-canvas-wrap" id="pdfCanvasWrap"><div class="pdf-reader-state" id="pdfReaderState">PDF-ga ayaa furmaya…</div><div class="pdf-pages" id="pdfPages"></div></div>
   </div>
 </div>
 
@@ -1060,42 +1063,88 @@ async function renderSubjectPdfBox(subject){
   }catch(e){console.error(e);info.innerHTML='<div class="pdf-empty-title">PDF-ga lama heli karo</div><div class="pdf-empty-text">Mar kale isku day ama hubi kaydka telefoonka.</div>';}
 }
 
-let openPdfDocument=null,pdfPageNumber=1,pdfZoom=1,pdfRenderTask=null;
+let openPdfDocument=null,pdfPageNumber=1,pdfZoom=1,pdfPageObserver=null,pdfScrollFrame=0,pdfResizeTimer=0,pdfBasePageSize=null;
+const pdfRenderTasks=new Map();
 async function openPdfReader(record){
-  const overlay=document.getElementById("pdfReaderOverlay"),canvas=document.getElementById("pdfCanvas"),state=document.getElementById("pdfReaderState");
+  const overlay=document.getElementById("pdfReaderOverlay"),state=document.getElementById("pdfReaderState"),pages=document.getElementById("pdfPages");
   document.getElementById("pdfReaderFileName").textContent=record.fileName;
   document.getElementById("pdfReaderSubject").textContent=record.subject;
-  canvas.hidden=true;state.hidden=false;state.textContent="PDF-ga ayaa furmaya…";overlay.classList.add("open");
+  pages.innerHTML="";state.hidden=false;state.textContent="PDF-ga ayaa furmaya…";overlay.classList.add("open");
   try{
     if(!window.ShacirkaPDF)throw new Error("PDF reader lama diyaarin");
     const data=new Uint8Array(await record.blob.arrayBuffer());
     openPdfDocument=await window.ShacirkaPDF.getDocument({data}).promise;pdfPageNumber=1;pdfZoom=1;
-    await renderPdfPage();
+    document.getElementById("pdfTotalPages").textContent=openPdfDocument.numPages;
+    document.getElementById("pdfPageInput").max=openPdfDocument.numPages;
+    await buildPdfPages(1);
   }catch(e){console.error(e);state.hidden=false;state.textContent="PDF-gan lama furi karin. Waxaa laga yaabaa inuu dhaawacan yahay ama sir ku xiran yahay.";}
 }
-async function renderPdfPage(){
+function pdfFitScale(base){
+  const wrap=document.getElementById("pdfCanvasWrap");
+  return Math.max(.35,Math.min(1.65,(wrap.clientWidth-20)/base.width))*pdfZoom;
+}
+async function buildPdfPages(targetPage=1){
   if(!openPdfDocument)return;
-  const canvas=document.getElementById("pdfCanvas"),wrap=document.getElementById("pdfCanvasWrap"),state=document.getElementById("pdfReaderState");
-  state.hidden=false;state.textContent="Bogga ayaa soo baxaya…";canvas.hidden=true;
-  if(pdfRenderTask){try{pdfRenderTask.cancel()}catch(e){}}
-  const page=await openPdfDocument.getPage(pdfPageNumber),base=page.getViewport({scale:1});
-  const fit=Math.max(.45,Math.min(1.65,(wrap.clientWidth-28)/base.width)),viewport=page.getViewport({scale:fit*pdfZoom}),dpr=Math.min(window.devicePixelRatio||1,2);
-  canvas.width=Math.floor(viewport.width*dpr);canvas.height=Math.floor(viewport.height*dpr);canvas.style.width=Math.floor(viewport.width)+"px";canvas.style.height=Math.floor(viewport.height)+"px";
-  const ctx=canvas.getContext("2d",{alpha:false});pdfRenderTask=page.render({canvasContext:ctx,viewport,transform:dpr!==1?[dpr,0,0,dpr,0,0]:null});
-  try{await pdfRenderTask.promise;canvas.hidden=false;state.hidden=true;}catch(e){if(e?.name!=="RenderingCancelledException")throw e;}
-  document.getElementById("pdfPageCount").textContent=`Bog ${pdfPageNumber} / ${openPdfDocument.numPages}`;
-  document.getElementById("pdfPrevBtn").disabled=pdfPageNumber<=1;document.getElementById("pdfNextBtn").disabled=pdfPageNumber>=openPdfDocument.numPages;
-  wrap.scrollTo({top:0,left:0});
+  const pages=document.getElementById("pdfPages"),state=document.getElementById("pdfReaderState");
+  pdfPageObserver?.disconnect();
+  pdfRenderTasks.forEach(task=>{try{task.cancel()}catch(e){}});pdfRenderTasks.clear();
+  state.hidden=false;state.textContent="Bogagga ayaa diyaarsamaya…";pages.innerHTML="";
+  const first=await openPdfDocument.getPage(1),base=first.getViewport({scale:1});pdfBasePageSize={width:base.width,height:base.height};
+  const scale=pdfFitScale(pdfBasePageSize),fragment=document.createDocumentFragment();
+  for(let n=1;n<=openPdfDocument.numPages;n++){
+    const shell=document.createElement("div");shell.className="pdf-page-shell";shell.dataset.page=String(n);
+    shell.style.width=Math.round(base.width*scale)+"px";shell.style.height=Math.round(base.height*scale)+"px";
+    shell.innerHTML=`<span class="pdf-page-loading">Bog ${n}</span>`;fragment.appendChild(shell);
+  }
+  pages.appendChild(fragment);state.hidden=true;
+  pdfPageObserver=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting)renderPdfPageShell(entry.target);}),{root:document.getElementById("pdfCanvasWrap"),rootMargin:"900px 0px"});
+  pages.querySelectorAll(".pdf-page-shell").forEach(shell=>pdfPageObserver.observe(shell));
+  requestAnimationFrame(()=>scrollToPdfPage(targetPage,false));
+}
+async function renderPdfPageShell(shell){
+  if(!openPdfDocument||shell.dataset.rendering==="1"||shell.dataset.rendered==="1")return;
+  const pageNumber=Number(shell.dataset.page);shell.dataset.rendering="1";
+  try{
+    const page=await openPdfDocument.getPage(pageNumber),base=page.getViewport({scale:1}),viewport=page.getViewport({scale:pdfFitScale(base)}),dpr=Math.min(window.devicePixelRatio||1,2);
+    shell.style.width=Math.round(viewport.width)+"px";shell.style.height=Math.round(viewport.height)+"px";
+    const canvas=document.createElement("canvas");canvas.width=Math.floor(viewport.width*dpr);canvas.height=Math.floor(viewport.height*dpr);canvas.style.width=Math.round(viewport.width)+"px";canvas.style.height=Math.round(viewport.height)+"px";
+    const task=page.render({canvasContext:canvas.getContext("2d",{alpha:false}),viewport,transform:dpr!==1?[dpr,0,0,dpr,0,0]:null});pdfRenderTasks.set(pageNumber,task);
+    await task.promise;
+    if(!openPdfDocument)return;shell.replaceChildren(canvas);shell.dataset.rendered="1";
+  }catch(e){
+    if(e?.name!=="RenderingCancelledException"){console.error(e);shell.innerHTML='<span class="pdf-page-loading">Boggan lama furi karin</span>';}
+  }finally{delete shell.dataset.rendering;pdfRenderTasks.delete(pageNumber);}
+}
+function scrollToPdfPage(pageNumber,smooth=true){
+  if(!openPdfDocument)return;
+  const n=Math.max(1,Math.min(openPdfDocument.numPages,Number(pageNumber)||1)),shell=document.querySelector(`.pdf-page-shell[data-page="${n}"]`),wrap=document.getElementById("pdfCanvasWrap");
+  if(!shell)return;pdfPageNumber=n;document.getElementById("pdfPageInput").value=n;
+  wrap.scrollTo({top:Math.max(0,shell.offsetTop-8),behavior:smooth?"smooth":"auto"});
+}
+function updatePdfCurrentPage(){
+  pdfScrollFrame=0;if(!openPdfDocument)return;
+  const wrap=document.getElementById("pdfCanvasWrap"),center=wrap.scrollTop+wrap.clientHeight/2,shells=document.querySelectorAll(".pdf-page-shell");
+  let nearest=pdfPageNumber,distance=Infinity;
+  shells.forEach(shell=>{const d=Math.abs(shell.offsetTop+shell.offsetHeight/2-center);if(d<distance){distance=d;nearest=Number(shell.dataset.page);}});
+  if(nearest!==pdfPageNumber){pdfPageNumber=nearest;document.getElementById("pdfPageInput").value=nearest;}
+  shells.forEach(shell=>{const n=Number(shell.dataset.page);if(Math.abs(n-nearest)>6&&shell.dataset.rendered==="1"){shell.innerHTML=`<span class="pdf-page-loading">Bog ${n}</span>`;delete shell.dataset.rendered;}});
+}
+function jumpToTypedPdfPage(){scrollToPdfPage(document.getElementById("pdfPageInput").value,true);}
+async function changePdfZoom(delta){
+  if(!openPdfDocument)return;const next=Math.max(.6,Math.min(2.2,pdfZoom+delta));if(next===pdfZoom)return;pdfZoom=next;await buildPdfPages(pdfPageNumber);
 }
 async function closePdfReader(){
-  document.getElementById("pdfReaderOverlay").classList.remove("open");if(pdfRenderTask){try{pdfRenderTask.cancel()}catch(e){}}
-  if(openPdfDocument){try{await openPdfDocument.destroy()}catch(e){}}openPdfDocument=null;pdfRenderTask=null;
+  document.getElementById("pdfReaderOverlay").classList.remove("open");pdfPageObserver?.disconnect();pdfPageObserver=null;
+  pdfRenderTasks.forEach(task=>{try{task.cancel()}catch(e){}});pdfRenderTasks.clear();
+  if(openPdfDocument){try{await openPdfDocument.destroy()}catch(e){}}openPdfDocument=null;pdfBasePageSize=null;document.getElementById("pdfPages").innerHTML="";
 }
 document.getElementById("pdfReaderCloseBtn").addEventListener("click",closePdfReader);
-document.getElementById("pdfPrevBtn").addEventListener("click",()=>{if(pdfPageNumber>1){pdfPageNumber--;renderPdfPage();}});
-document.getElementById("pdfNextBtn").addEventListener("click",()=>{if(openPdfDocument&&pdfPageNumber<openPdfDocument.numPages){pdfPageNumber++;renderPdfPage();}});
-document.getElementById("pdfZoomOutBtn").addEventListener("click",()=>{if(openPdfDocument){pdfZoom=Math.max(.6,pdfZoom-.2);renderPdfPage();}});
-document.getElementById("pdfZoomInBtn").addEventListener("click",()=>{if(openPdfDocument){pdfZoom=Math.min(2.2,pdfZoom+.2);renderPdfPage();}});
+document.getElementById("pdfGoBtn").addEventListener("click",jumpToTypedPdfPage);
+document.getElementById("pdfPageInput").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();jumpToTypedPdfPage();e.target.blur();}});
+document.getElementById("pdfZoomOutBtn").addEventListener("click",()=>changePdfZoom(-.2));
+document.getElementById("pdfZoomInBtn").addEventListener("click",()=>changePdfZoom(.2));
+document.getElementById("pdfCanvasWrap").addEventListener("scroll",()=>{if(!pdfScrollFrame)pdfScrollFrame=requestAnimationFrame(updatePdfCurrentPage);},{passive:true});
+window.addEventListener("resize",()=>{if(!openPdfDocument)return;clearTimeout(pdfResizeTimer);pdfResizeTimer=setTimeout(()=>buildPdfPages(pdfPageNumber),180);});
 document.getElementById("modalSaveBtn").addEventListener("click", ()=>{
   if(editingIndex===null) return;
   const s = STATE.subjects[editingIndex];
