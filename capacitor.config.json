@@ -1,6 +1,6 @@
 {
   "appId": "app.shacirka.dashboard",
-  "appName": "Shacirka",
+  "appName": "Hage Study",
   "webDir": "www",
   "backgroundColor": "#0F1E3C",
   "plugins": {"LocalNotifications":{"iconColor":"#0F1E3C"}}

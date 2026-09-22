@@ -33,7 +33,7 @@ async function checkUpdate(force=false){
     const [info,res]=await Promise.all([App.getInfo(),fetch(`${UPDATE_MANIFEST}?t=${now}`,{cache:'no-store'})]);
     if(!res.ok)throw new Error(`HTTP ${res.status}`);const meta=await res.json();
     if(newer(meta.version,info.version)){
-      const ok=confirm(`Shacirka ${meta.version} ayaa diyaar ah. Ma rabtaa inaad hadda update-gareyso?`);
+      const ok=confirm(`Hage Study ${meta.version} ayaa diyaar ah. Ma rabtaa inaad hadda update-gareyso?`);
       if(ok&&meta.apkUrl)await Browser.open({url:meta.apkUrl});
       return {available:true,current:info.version,latest:meta.version};
     }
@@ -43,7 +43,7 @@ async function checkUpdate(force=false){
 window.ShacirkaNative={
   isNative:Capacitor.isNativePlatform(),sync,checkUpdate,
   async permission(){return (await N.requestPermissions()).display==='granted';},
-  async test(){await N.schedule({notifications:[{id:900000,title:'Shacirka',body:'Ogeysiisyada telefoonka waa la daaray.',schedule:{at:new Date(Date.now()+2000)},channelId:'study'}]});},
+  async test(){await N.schedule({notifications:[{id:900000,title:'Hage Study',body:'Ogeysiisyada telefoonka waa la daaray.',schedule:{at:new Date(Date.now()+2000)},channelId:'study'}]});},
   async ready(onResume){
     await App.addListener('appStateChange',({isActive})=>{if(isActive){onResume();checkUpdate(false);}});
     await N.addListener('localNotificationActionPerformed',({notification})=>{document.querySelector(`[data-view="${notification.extra?.view||'schedule'}"]`)?.click();});

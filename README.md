@@ -1,7 +1,7 @@
-# Shacirka mobile
+# Hage Study mobile
 
 Mashruuca app-ka Android iyo iPhone. Dashboard-ka wuxuu ku dhex kaydsan yahay
-app-ka, mana furo Chrome. Magaca iyo loogada waa Shacirka.
+app-ka, mana furo Chrome. Magaca iyo loogada waa Hage Study.
 
 ## Xaaladda
 

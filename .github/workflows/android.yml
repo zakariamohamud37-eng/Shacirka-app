@@ -1,4 +1,4 @@
-name: Build Shacirka Android APK
+name: Build Hage Study Android APK
 
 on:
   workflow_dispatch:
@@ -34,13 +34,13 @@ jobs:
         working-directory: android
       - name: Prepare signing artifact
         run: |
-          cp android/app/build/outputs/apk/release/app-release-unsigned.apk Shacirka-unsigned.apk
+          cp android/app/build/outputs/apk/release/app-release-unsigned.apk HageStudy-unsigned.apk
           cp "$ANDROID_HOME/build-tools/35.0.0/lib/apksigner.jar" apksigner.jar
       - name: Upload unsigned APK
         uses: actions/upload-artifact@v4
         with:
-          name: Shacirka-Unsigned-APK
+          name: HageStudy-Unsigned-APK
           path: |
-            Shacirka-unsigned.apk
+            HageStudy-unsigned.apk
             apksigner.jar
           retention-days: 7
