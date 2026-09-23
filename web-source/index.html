@@ -19,6 +19,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="enhancements.css">
 <style>
 :root{
   --bg-a:#EEF4FF; --bg-b:#F8FAFF;
@@ -130,7 +131,8 @@ button{font-family:var(--font-b);cursor:pointer;}
 .main-col,.aside-col{display:flex;flex-direction:column;gap:18px;}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:20px;box-shadow:var(--shadow);animation:fadeUp .55s ease both;}
 .card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:16px;flex-wrap:wrap;}
-.card-title{font-family:var(--font-d);font-size:16.5px;font-weight:700;}
+.card-title{font-family:var(--font-d);font-size:16.5px;font-weight:700;display:flex;align-items:center;gap:8px;}
+.title-icon{width:28px;height:28px;display:inline-flex;align-items:center;justify-content:center;border-radius:9px;background:var(--primary-pale);color:var(--primary);flex:0 0 auto}.title-icon svg{width:15px;height:15px}
 .card-sub{font-size:12.5px;color:var(--ink-3);margin-top:3px;}
 .pill-count{font-size:11.5px;font-weight:700;color:var(--primary);background:var(--primary-pale);padding:4px 10px;border-radius:20px;white-space:nowrap;}
 
@@ -449,10 +451,15 @@ body[data-level]:not([data-level="university"]) .university-workspace{display:no
         </button>
         <div class="dropdown-panel" id="settingsPanel">
           <div class="dropdown-title">Dejimaha</div>
-          <div class="settings-row"><span>Muuqaalka Mugdiga (Dark Mode)</span><button class="switch" id="switchDark"></button></div>
-          <div class="settings-row"><span>Ogeysiisyada guud</span><button class="switch" id="switchNotif" aria-label="Daar ama dami ogeysiisyada"></button></div>
+          <div class="settings-row"><span>Muuqaalka Mugdiga (Dark Mode)</span><button class="switch" id="switchDark" type="button" role="switch" aria-checked="false" aria-label="Daar ama dami muuqaalka mugdiga"></button></div>
+          <div class="settings-row"><span>Ogeysiisyada guud</span><button class="switch" id="switchNotif" type="button" role="switch" aria-checked="false" aria-label="Daar ama dami ogeysiisyada"></button></div>
           <p id="pushStatus" role="status" style="font-size:12px;padding:8px 14px;line-height:1.5">Daar ogeysiisyada si jadwalkaagu ku xusuusiyo.</p>
-          <div class="settings-row"><span>Dhawaaqa</span><button class="switch" id="switchSound"></button></div>
+          <div class="settings-row"><span>Dhawaaqa</span><button class="switch" id="switchSound" type="button" role="switch" aria-checked="false" aria-label="Daar ama dami dhawaaqa"></button></div>
+          <div class="settings-divider"></div>
+          <div class="storage-summary" id="storageSummary" role="status">Hubinaya kaydka...</div>
+          <div class="settings-actions"><button class="settings-action" id="backupExportBtn" type="button">Soo saar backup</button><button class="settings-action" id="backupImportBtn" type="button">Soo celi backup</button><button class="settings-action" id="diagnosticsBtn" type="button">Warbixinta ciladaha</button></div>
+          <input id="backupImportInput" type="file" accept="application/json,.hagebackup" hidden>
+          <button class="settings-action full" id="onboardingOpenBtn" type="button">Fur hagaha bilowga</button>
         </div>
       </div>
       <button class="icon-btn" id="themeBtn" aria-label="Beddel muuqaalka" title="Beddel muuqaalka (Dark/Light)"></button>
@@ -464,9 +471,10 @@ body[data-level]:not([data-level="university"]) .university-workspace{display:no
   <section class="stats-grid" id="statsGrid" aria-label="Tirakoobka guud"></section>
 
   <section class="card university-workspace" data-app-view="home subjects" aria-label="Qorshaha jaamacadda">
-    <h2>🎓 Qorshaha jaamacadda</h2><p>Qor takhasuska iyo semester-ka. Ku dar koorsooyin, jadwal casharro, PDF iyo shaqooyinka la dhiibayo.</p>
+    <h2 class="card-title">🎓 Qorshaha jaamacadda</h2><p>Qor takhasuska iyo semester-ka. Ku dar koorsooyin, jadwal casharro, PDF iyo shaqooyinka la dhiibayo.</p>
     <div class="uni-meta"><label>Takhasuska<input id="uniMajor" class="select-input" type="text" maxlength="80" placeholder="Tusaale: Computer Science"></label><label>Semester-ka<input id="uniSemester" class="select-input" type="text" maxlength="45" placeholder="Tusaale: Semester 1"></label></div>
     <div class="uni-summary" id="uniSummary"></div>
+    <div class="university-pro-grid" id="universityProGrid"></div>
   </section>
 
   <!-- ============ MAIN LAYOUT ============ -->
@@ -504,7 +512,7 @@ body[data-level]:not([data-level="university"]) .university-workspace{display:no
           <span class="pill-count" id="hwCount">—</span>
         </div>
         <div class="hw-list" id="hwList"></div>
-        <div class="mini-form"><input class="mini-input" id="hwTaskInput" type="text" maxlength="120" placeholder="Shaqo ama assignment cusub"><select class="mini-input" id="hwSubjectInput" aria-label="Dooro maado"></select><input class="mini-input mini-date" id="hwDueInput" type="date" aria-label="Maalinta gudbinta"><button class="add-btn" id="hwAddBtn" type="button" aria-label="Ku dar shaqo">＋</button></div>
+        <div class="mini-form"><input class="mini-input" id="hwTaskInput" type="text" maxlength="120" placeholder="Shaqo ama assignment cusub" aria-label="Magaca shaqada"><select class="mini-input" id="hwSubjectInput" aria-label="Dooro maado"></select><select class="mini-input university-only-control" id="hwTypeInput" aria-label="Nooca assignment-ka"><option>Assignment</option><option>Project</option><option>Lab</option><option>Presentation</option><option>Reading</option></select><input class="mini-input mini-date" id="hwDueInput" type="date" aria-label="Maalinta gudbinta"><button class="add-btn" id="hwAddBtn" type="button" aria-label="Ku dar shaqo">＋</button></div>
         <div class="hw-progress-bar">
           <div class="progress-text"><span>Horumarka guud ee shaqooyinka</span><span id="hwPercentText">—</span></div>
           <div class="progress-track"><div class="progress-fill" id="hwPercentBar" style="width:0%"></div></div>
@@ -655,7 +663,7 @@ body[data-level]:not([data-level="university"]) .university-workspace{display:no
       <button data-v="progress" type="button">Socda</button>
       <button data-v="done" type="button">La Dhammeeyay</button>
     </div>
-    <div id="universityCourseFields" style="display:none"><label class="modal-label">Magaca koorsada</label><input id="modalCourseName" class="select-input" maxlength="90"><label class="modal-label">Credit hours</label><input id="modalCourseCredits" class="select-input" type="number" min="0" max="30" step="1"><label class="modal-label">Macallin ama lecturer</label><input id="modalCourseLecturer" class="select-input" maxlength="90"><label class="modal-label">Qolka / goobta</label><input id="modalCourseRoom" class="select-input" maxlength="90"><button id="deleteCourseBtn" class="btn btn-ghost" type="button" style="margin-top:12px">Ka saar koorsada</button></div>
+    <div id="universityCourseFields" style="display:none"><label class="modal-label" for="modalCourseName">Magaca koorsada</label><input id="modalCourseName" class="select-input" maxlength="90"><label class="modal-label" for="modalCourseCredits">Saacadaha credit-ka</label><input id="modalCourseCredits" class="select-input" type="number" min="1" max="12" step="1"><label class="modal-label" for="modalCourseLecturer">Macallinka</label><input id="modalCourseLecturer" class="select-input" maxlength="90"><label class="modal-label" for="modalCourseRoom">Qolka ama goobta</label><input id="modalCourseRoom" class="select-input" maxlength="90"><label class="modal-label" for="modalCourseNotes">Qoraallada koorsada</label><textarea id="modalCourseNotes" class="select-input course-textarea" maxlength="2000" rows="3" placeholder="Qor xogta muhiimka ah ee koorsada"></textarea><label class="modal-label" for="modalCourseResources">Link-yada casharrada</label><textarea id="modalCourseResources" class="select-input course-textarea" maxlength="4000" rows="3" placeholder="Hal link ku qor sadar kasta"></textarea><div id="courseResourceLinks" class="course-resource-links"></div><div class="attendance-editor"><div><strong>Imaanshaha</strong><span id="modalAttendanceText">0 / 0</span></div><button class="btn btn-ghost attendance-action" data-attendance="present" type="button">Joogay</button><button class="btn btn-ghost attendance-action" data-attendance="absent" type="button">Maqnaa</button><button class="btn btn-ghost attendance-action" data-attendance="undo" type="button">Ka noqo</button></div><button id="deleteCourseBtn" class="btn btn-ghost danger-button" type="button" style="margin-top:12px">Ka saar koorsada</button></div>
     <label class="modal-label">Buugga PDF-ga</label>
     <div class="pdf-box">
       <div class="pdf-file-icon">PDF</div>
@@ -685,7 +693,11 @@ body[data-level]:not([data-level="university"]) .university-workspace{display:no
       <button class="pdf-tool-btn" id="pdfGoBtn" type="button">Tag</button>
       <button class="pdf-tool-btn" id="pdfZoomOutBtn" type="button" aria-label="Yaree">−</button>
       <button class="pdf-tool-btn" id="pdfZoomInBtn" type="button" aria-label="Weynee">+</button>
+      <button class="pdf-tool-btn" id="pdfBookmarkBtn" type="button" aria-label="Kaydi boggan">Bookmark</button>
+      <button class="pdf-tool-btn" id="pdfHighlightBtn" type="button" aria-label="Calaamadee boggan">Highlight</button>
     </div>
+    <div class="pdf-findbar"><input id="pdfSearchInput" type="search" placeholder="Ka raadi PDF-ga" aria-label="Ka raadi PDF-ga"><button class="pdf-tool-btn" id="pdfSearchBtn" type="button">Raadi</button><select id="pdfSavedPages" aria-label="Bogagga la kaydiyey"><option value="">Bogagga la kaydiyey</option></select></div>
+    <div class="pdf-search-status" id="pdfSearchStatus" role="status"></div>
     <div class="pdf-canvas-wrap" id="pdfCanvasWrap"><div class="pdf-reader-state" id="pdfReaderState">PDF-ga ayaa furmaya…</div><div class="pdf-pages" id="pdfPages"></div></div>
   </div>
 </div>
@@ -698,7 +710,11 @@ body[data-level]:not([data-level="university"]) .university-workspace{display:no
   </div>
 </div>
 
-<div class="modal-overlay" id="courseModalOverlay"><div class="modal-panel"><div class="modal-head"><div class="modal-ico">🎓</div><div><div class="modal-title">Ku dar koorso</div><div class="modal-sub">Koorsooyinkaaga jaamacadda</div></div><button class="modal-close" id="courseCloseBtn" type="button" aria-label="Xir">✕</button></div><label class="modal-label">Magaca koorsada</label><input id="courseNameInput" class="select-input" maxlength="90" placeholder="Tusaale: Data Structures"><label class="modal-label">Credit hours</label><input id="courseCreditsInput" class="select-input" type="number" min="0" max="30" step="1" value="3"><label class="modal-label">Macallin ama lecturer</label><input id="courseLecturerInput" class="select-input" maxlength="90" placeholder="Ikhtiyaari"><label class="modal-label">Qolka / goobta</label><input id="courseRoomInput" class="select-input" maxlength="90" placeholder="Ikhtiyaari"><div class="modal-actions"><button class="btn btn-ghost" id="courseCancelBtn" type="button">Jooji</button><button class="btn btn-primary" id="courseSaveBtn" type="button">Ku dar koorsada</button></div></div></div>
+<div class="modal-overlay" id="courseModalOverlay"><div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="courseModalTitle"><div class="modal-head"><div class="modal-ico">🎓</div><div><div class="modal-title" id="courseModalTitle">Ku dar koorso</div><div class="modal-sub">Koorsooyinkaaga jaamacadda</div></div><button class="modal-close" id="courseCloseBtn" type="button" aria-label="Xir">✕</button></div><label class="modal-label" for="courseNameInput">Magaca koorsada</label><input id="courseNameInput" class="select-input" maxlength="90" placeholder="Tusaale: Data Structures"><label class="modal-label" for="courseCreditsInput">Saacadaha credit-ka</label><input id="courseCreditsInput" class="select-input" type="number" min="1" max="12" step="1" value="3"><label class="modal-label" for="courseLecturerInput">Macallinka</label><input id="courseLecturerInput" class="select-input" maxlength="90" placeholder="Ikhtiyaari"><label class="modal-label" for="courseRoomInput">Qolka ama goobta</label><input id="courseRoomInput" class="select-input" maxlength="90" placeholder="Ikhtiyaari"><div class="modal-actions"><button class="btn btn-ghost" id="courseCancelBtn" type="button">Jooji</button><button class="btn btn-primary" id="courseSaveBtn" type="button">Ku dar koorsada</button></div></div></div>
+
+<div class="modal-overlay" id="onboardingOverlay"><div class="modal-panel onboarding-panel" role="dialog" aria-modal="true" aria-labelledby="onboardingTitle"><div class="onboarding-step" id="onboardingStepText">Tallaabada 1 ee 3</div><h2 id="onboardingTitle">Ku bilow Hage Study</h2><p id="onboardingDescription">Dooro heerka waxbarashada si app-ku kuugu diyaariyo qeybaha saxda ah.</p><div id="onboardingBody"></div><div class="modal-actions"><button class="btn btn-ghost" id="onboardingSkipBtn" type="button">Ka gudub</button><button class="btn btn-primary" id="onboardingNextBtn" type="button">Sii wad</button></div></div></div>
+
+<div class="toast-region" id="toastRegion" aria-live="polite" aria-atomic="true"></div>
 
 <div class="modal-overlay" id="installModalOverlay">
  <div class="modal-panel"><div class="modal-head"><div class="modal-ico">📲</div><div><div class="modal-title">Ku rakib telefoonka</div><div class="modal-sub">Android iyo iPhone</div></div><button class="modal-close" id="installCloseBtn">✕</button></div><p style="font-size:13px;line-height:1.7;color:var(--ink-2);margin-top:14px"><b>iPhone:</b> Safari ka fur, taabo Share, kadib dooro <b>Add to Home Screen</b>.<br><br><b>Android:</b> Chrome ka fur, taabo menu-ga ⋮, kadib dooro <b>Install app</b> ama <b>Add to Home screen</b>.</p><div class="modal-actions"><button class="btn btn-primary" id="installDoneBtn">Waan fahmay</button></div></div>
@@ -1094,7 +1110,7 @@ document.getElementById("courseSaveBtn").addEventListener("click",()=>{
   if(ACTIVE_LEVEL!=="university")return;
   const name=document.getElementById("courseNameInput").value.trim();
   if(!name||STATE.subjects.some(s=>s.name.toLowerCase()===name.toLowerCase())){alert("Geli magac koorso oo cusub.");return;}
-  STATE.subjects.push({id:uid("course"),name,short:name.slice(0,10),sub:"",ico:"📘",credits:Math.min(30,Math.max(0,Number(document.getElementById("courseCreditsInput").value)||0)),lecturer:document.getElementById("courseLecturerInput").value.trim(),room:document.getElementById("courseRoomInput").value.trim(),progress:0,grade:"—",status:"new"});
+  STATE.subjects.push({id:uid("course"),name,short:name.slice(0,10),sub:"",ico:"📘",credits:Math.min(12,Math.max(1,Number(document.getElementById("courseCreditsInput").value)||3)),lecturer:document.getElementById("courseLecturerInput").value.trim(),room:document.getElementById("courseRoomInput").value.trim(),courseNotes:"",resources:[],attendance:{attended:0,total:0},progress:0,grade:"—",status:"new"});
   saveState();renderSubjects();renderStats();renderChart();renderHomework();renderUniversitySummary();closeCourseModal();
 });
 document.getElementById("deleteCourseBtn").addEventListener("click",async()=>{
@@ -1258,7 +1274,7 @@ document.getElementById("modalSaveBtn").addEventListener("click", ()=>{
     const name=document.getElementById("modalCourseName").value.trim();
     if(!name||STATE.subjects.some((other,i)=>i!==editingIndex&&other.name.toLowerCase()===name.toLowerCase())){alert("Magaca koorsada waa inuu gaar ahaadaa.");return;}
     const oldName=s.name;s.name=name;s.short=name.slice(0,10);
-    s.credits=Math.min(30,Math.max(0,Number(document.getElementById("modalCourseCredits").value)||0));
+    s.credits=Math.min(12,Math.max(1,Number(document.getElementById("modalCourseCredits").value)||3));
     s.lecturer=document.getElementById("modalCourseLecturer").value.trim();
     s.room=document.getElementById("modalCourseRoom").value.trim();
     if(oldName!==name){
@@ -1320,7 +1336,7 @@ function renderSchedule(day){
     const icon = r.free ? "🌙" : (PHASE_ICO[r.phase]||"📅");
     const noteHtml = r.note ? `<div class="tl-note">${escapeHtml(r.note)}</div>` : (r.free ? `<div class="tl-note">Nasasho</div>` : "");
     return `<div class="tl-row${free}"><div class="tl-dot ${ACTIVE_LEVEL==="university"?"uni":r.phase}">${icon}</div>
-      <div><div class="tl-phase ${ACTIVE_LEVEL==="university"?"uni":r.phase}">${escapeHtml(r.label||"Cashar")} · ${escapeHtml(r.time||"--:--")}</div><div class="tl-subject">${r.free ? "Xilli Fasax" : subjIcon(r.subject)+" "+escapeHtml(r.subject)}</div>${noteHtml}</div></div>`;
+      <div><div class="tl-phase ${ACTIVE_LEVEL==="university"?"uni":r.phase}">${escapeHtml(r.label||"Cashar")} · ${escapeHtml(r.time||"--:--")}${ACTIVE_LEVEL==="university"&&r.endTime?"–"+escapeHtml(r.endTime):""}</div><div class="tl-subject">${r.free ? "Xilli Fasax" : subjIcon(r.subject)+" "+escapeHtml(r.subject)}</div>${noteHtml}</div></div>`;
   }).join("") : `<div class="empty-courses">${ACTIVE_LEVEL==="university"?"Maalintan cashar ma qorna. Taabo “Beddel jadwalka” si aad u geliso koorso, saacad iyo goob.":"Maalintan wax jadwal ah ma jiraan."}</div>`;
 }
 function renderScheduleTabs(){
@@ -1344,7 +1360,7 @@ function universityScheduleRow(row={}){
   const options=STATE.subjects.map(s=>`<option value="${escapeHtml(s.name)}" ${s.name===row.subject?'selected':''}>${escapeHtml(s.name)}</option>`).join("");
   const div=document.createElement("div");div.className="uni-sched-row form-grid";div.style.cssText="padding:12px 0;border-bottom:1px solid var(--border)";
   div.dataset.id=row.id||uid("slot");
-  div.innerHTML=`<label><span class="modal-label">Koorso</span><select class="select-input uni-sched-subject">${options}</select></label><label><span class="modal-label">Waqtiga</span><input class="select-input uni-sched-time" type="time" value="${escapeHtml(row.time||"08:00")}"></label><label><span class="modal-label">Nooca casharka</span><input class="select-input uni-sched-label" maxlength="40" value="${escapeHtml(row.label||"Cashar")}" placeholder="Cashar / Lab"></label><label><span class="modal-label">Qolka ama faahfaahin</span><input class="select-input uni-sched-note" maxlength="90" value="${escapeHtml(row.note||"")}" placeholder="Ikhtiyaari"></label><button class="btn btn-ghost uni-remove-slot" type="button">Ka saar casharkan</button>`;
+  div.innerHTML=`<label><span class="modal-label">Koorso</span><select class="select-input uni-sched-subject">${options}</select></label><label><span class="modal-label">Bilowga</span><input class="select-input uni-sched-time" type="time" value="${escapeHtml(row.time||"08:00")}"></label><label><span class="modal-label">Dhammaadka</span><input class="select-input uni-sched-end" type="time" value="${escapeHtml(row.endTime||"09:00")}"></label><label><span class="modal-label">Nooca casharka</span><input class="select-input uni-sched-label" maxlength="40" value="${escapeHtml(row.label||"Cashar")}" placeholder="Cashar / Lab"></label><label class="full"><span class="modal-label">Qolka ama faahfaahin</span><input class="select-input uni-sched-note" maxlength="90" value="${escapeHtml(row.note||"")}" placeholder="Ikhtiyaari"></label><button class="btn btn-ghost uni-remove-slot" type="button">Ka saar casharkan</button>`;
   div.querySelector(".uni-remove-slot").addEventListener("click",()=>div.remove());return div;
 }
 function renderUniversityScheduleEditor(rows){
@@ -1360,8 +1376,10 @@ document.getElementById("scheduleCloseBtn").addEventListener("click",closeSchedu
 document.getElementById("scheduleCancelBtn").addEventListener("click",closeScheduleEditor);
 document.getElementById("scheduleSaveBtn").addEventListener("click",()=>{
   if(ACTIVE_LEVEL==="university"){
-    const rows=[...document.querySelectorAll(".uni-sched-row")].map(el=>({id:el.dataset.id,phase:el.dataset.id,label:el.querySelector(".uni-sched-label").value.trim()||"Cashar",subject:el.querySelector(".uni-sched-subject").value,time:el.querySelector(".uni-sched-time").value,note:el.querySelector(".uni-sched-note").value.trim()}));
-    if(rows.some(r=>!r.subject||!r.time)){alert("Cashar kasta koorso iyo saacad u dooro.");return;}
+    const rows=[...document.querySelectorAll(".uni-sched-row")].map(el=>({id:el.dataset.id,phase:el.dataset.id,label:el.querySelector(".uni-sched-label").value.trim()||"Cashar",subject:el.querySelector(".uni-sched-subject").value,time:el.querySelector(".uni-sched-time").value,endTime:el.querySelector(".uni-sched-end").value,note:el.querySelector(".uni-sched-note").value.trim()}));
+    if(rows.some(r=>!r.subject||!r.time||!r.endTime)){alert("Cashar kasta koorso, waqtiga bilowga iyo dhammaadka u dooro.");return;}
+    if(rows.some(r=>timeToMinutes(r.endTime)<=timeToMinutes(r.time))){alert("Waqtiga dhammaadka waa inuu ka dambeeyaa waqtiga bilowga.");return;}
+    const conflicts=getScheduleConflicts(rows);if(conflicts.length){alert(`Jadwalka lama kaydin. ${conflicts[0][0].subject} iyo ${conflicts[0][1].subject} ayaa waqti isku dul dhacay.`);return;}
     STATE.schedule[activeScheduleDay]=rows.sort((a,b)=>a.time.localeCompare(b.time));
   }else{
     const rows=STATE.schedule[activeScheduleDay];document.querySelectorAll('.sched-subject').forEach(el=>{const r=rows[+el.dataset.i];r.subject=el.value;r.free=el.value==='Xilli Fasax'});
@@ -1507,7 +1525,7 @@ function renderHomework(){
     const badgeText = done?"La Gudbiyay":late?"Dib u Dhacay":"Sugaya";
     return `<div class="hw-row">
       <button class="hw-check ${done?'checked':''}" data-i="${i}" aria-label="Calaamadi">${done?'✓':''}</button>
-      <div class="hw-info"><div class="hw-title ${done?'done':''}">${escapeHtml(h.task)}</div><div class="hw-meta">${subjIcon(h.subject)} ${escapeHtml(h.subject)} · Gudbinta: ${escapeHtml(h.due)}</div></div>
+      <div class="hw-info"><div class="hw-title ${done?'done':''}">${escapeHtml(h.task)}</div><div class="hw-meta">${subjIcon(h.subject)} ${escapeHtml(h.subject)}${ACTIVE_LEVEL==="university"&&h.type?` · ${escapeHtml(h.type)}`:""} · Gudbinta: ${escapeHtml(h.due)}</div></div>
       <span class="status-badge ${done?'submitted':late?'late':'pending'}">${badgeText}</span><button class="modal-close hw-delete" data-i="${i}" type="button" aria-label="Ka saar shaqada">×</button>
     </div>`;
   }).join("") : '<div class="empty-courses">Weli shaqo ma qorna. Ku dar assignment iyo waqtiga gudbinta hoos.</div>';
@@ -1532,7 +1550,7 @@ function renderHomework(){
 document.getElementById("hwAddBtn").addEventListener("click",()=>{
   const task=document.getElementById("hwTaskInput"),subject=document.getElementById("hwSubjectInput"),due=document.getElementById("hwDueInput");
   if(!task.value.trim()||!subject.value||!due.value){alert("Geli shaqada, maadada iyo maalinta gudbinta.");return;}
-  STATE.homework.push({id:uid("hw"),task:task.value.trim(),subject:subject.value,due:due.value,status:"pending"});
+  STATE.homework.push({id:uid("hw"),task:task.value.trim(),subject:subject.value,due:due.value,status:"pending",type:ACTIVE_LEVEL==="university"?(document.getElementById("hwTypeInput")?.value||"Assignment"):"Homework"});
   task.value="";due.value="";saveState();renderHomework();renderDeadlines();renderStats();renderUniversitySummary();
 });
 
@@ -1931,5 +1949,6 @@ if ("serviceWorker" in navigator) {
   });
 }
 </script>
+<script src="enhancements.js"></script>
 </body>
 </html>

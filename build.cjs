@@ -9,6 +9,8 @@ const esbuild=require('esbuild');
   fs.writeFileSync('www/index.html',html);
   fs.cpSync('web-source/icons','www/icons',{recursive:true});
   fs.copyFileSync('native-glue.js','www/native-glue.js');
+  fs.copyFileSync('web-source/enhancements.css','www/enhancements.css');
+  fs.copyFileSync('web-source/enhancements.js','www/enhancements.js');
   fs.copyFileSync('node_modules/pdfjs-dist/legacy/build/pdf.worker.min.js','www/pdf.worker.min.js');
   await Promise.all([
     esbuild.build({entryPoints:['native.js'],bundle:true,format:'iife',outfile:'www/native.js'}),

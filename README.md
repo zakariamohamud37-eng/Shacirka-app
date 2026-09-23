@@ -5,9 +5,8 @@ app-ka, mana furo Chrome. Magaca iyo loogada waa Hage Study.
 
 ## Xaaladda
 
-Source code iyo mashruucyada Android/iOS ayaa la diyaariyey. APK ama IPA la
-saxiixay wali lagama dhisin, telefoon dhab ahna laguma tijaabin.
-Mashruucani waa ka gooni nooca shaqaynaya ee Netlify, kaas oo sii shaqaynaya.
+Source code, mashruucyada Android/iOS iyo Android APK-ga la saxiixay waa la
+diyaariyey. iPhone-ka wuxuu isticmaalaa PWA ilaa Apple signing la dhammaystiro.
 
 ## Ogeysiisyada
 
@@ -25,9 +24,9 @@ Mashruucani waa ka gooni nooca shaqaynaya ee Netlify, kaas oo sii shaqaynaya.
 
 ## Xogta
 
-App-ka cusub wuxuu leeyahay kayd u gaar ah. Xogta Chrome/PWA si otomaatig ah
-uguma soo wareegayso. Ha tirtirin PWA-ga ilaa jadwalkaaga la wareejiyo.
-Noocani weli ma laha qalab xogta lagu soo dhoofiyo. Jadwalka waa dib loo gelin karaa.
+App-ku wuxuu leeyahay kayd u gaar ah. Xogta Chrome/PWA si otomaatig ah
+uguma soo wareegayso, laakiin Settings-ka waxaa ku jira backup export/import
+oo qaada profiles-ka iyo PDF-yada. Samee backup ka hor uninstall ama beddelka telefoonka.
 Daminta ogeysiisyada PWA-ga waxay ka hortagtaa laba fariimood marka app-ka
 cusub la hawlgeliyo. Qof walba xogtiisu waxay ku jirtaa telefoonkiisa.
 
@@ -43,9 +42,8 @@ yahay macOS iyo Xcode 26+. Dependencies waxaa lagu qufulay package-lock.json.
 
 Natiijada Android tijaabada: android/app/build/outputs/apk/debug/app-debug.apk.
 Debug APK waa tijaabo, ma aha nooca Play Store. GitHub Actions workflow-ga
-ku jira mashruucan wuxuu soo saari karaa test APK markii gacanta la bilaabo;
-weli lama orodsiin. Release-ka wuxuu u baahan yahay signing key joogto ah
-oo milkiiluhu haysto iyo tijaabo qalab dhab ah.
+ku jira mashruucan wuxuu soo saari karaa unsigned release APK. APK-ga dadweynaha
+waa in mar walba lagu saxiixaa signing key-ga joogtada ah ee milkiiluhu haysto.
 
 iPhone: npm run ios, Xcode ka dooro kooxda Apple iyo signing-ka saxda ah,
 kadib Archive. TestFlight/App Store waxay u baahan yihiin Apple Developer
