@@ -1299,11 +1299,15 @@ function renderChart(){
   const gradeScore={"A+":100,"A":95,"A-":90,"B+":85,"B":80,"B-":75,"C+":70,"C":65,"C-":60,"D":50};
   const n = subs.length;
   if(!n){document.getElementById("chartWrap").innerHTML='<div class="empty-courses">Garaafku wuxuu soo muuqanayaa marka koorso lagu daro.</div>';return;}
-  const W=Math.max(760,n*64),H=260,padTop=18,padBottom=70,padLeft=34,padRight=14;
+  /* Keep small University charts vertical and centred. Previously a single
+     course inherited the full plot width, which made its bar look horizontal. */
+  const W=n<=6?600:Math.max(760,n*88),H=260,padTop=18,padBottom=70,padLeft=34,padRight=14;
   const chartTop=padTop, chartBottom=H-padBottom, chartLeft=padLeft, chartRight=W-padRight;
-  const barGap=8;
+  const barGap=14;
   const barAreaW = chartRight-chartLeft;
-  const barW = (barAreaW-(n-1)*barGap)/n;
+  const barW = Math.min(76,(barAreaW-(n-1)*barGap)/n);
+  const barsWidth=n*barW+(n-1)*barGap;
+  const barsStart=chartLeft+Math.max(0,(barAreaW-barsWidth)/2);
   let gridLines="",yLabels="",bars="",values="",labels="";
   [{v:50,label:"D"},{v:65,label:"C"},{v:80,label:"B"},{v:95,label:"A"},{v:100,label:"A+"}].forEach(mark=>{
     const v=mark.v;
@@ -1313,7 +1317,7 @@ function renderChart(){
   });
   subs.forEach((s,i)=>{
     const score=gradeScore[s.grade]||0;
-    const x = chartLeft+i*(barW+barGap);
+    const x = barsStart+i*(barW+barGap);
     const h = (score/100)*(chartBottom-chartTop);
     const y = chartBottom-h;
     const cx = x+barW/2;
