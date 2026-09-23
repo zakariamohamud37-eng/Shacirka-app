@@ -1,0 +1,46 @@
+name: Build Hage Study Android APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - shacirka-mobile
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: 'platform-tools platforms;android-36 build-tools;35.0.0'
+          log-accepted-android-sdk-licenses: false
+      - name: Install dependencies
+        run: npm ci
+      - name: Sync app
+        run: npm run sync
+      - name: Build unsigned release APK
+        run: ./gradlew assembleRelease
+        working-directory: android
+      - name: Prepare signing artifact
+        run: |
+          cp android/app/build/outputs/apk/release/app-release-unsigned.apk HageStudy-unsigned.apk
+          cp "$ANDROID_HOME/build-tools/35.0.0/lib/apksigner.jar" apksigner.jar
+      - name: Upload unsigned APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: HageStudy-Unsigned-APK
+          path: |
+            HageStudy-unsigned.apk
+            apksigner.jar
+          retention-days: 7

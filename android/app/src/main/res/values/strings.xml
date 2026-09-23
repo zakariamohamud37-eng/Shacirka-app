@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Hage Study</string>
+    <string name="title_activity_main">Hage Study</string>
+    <string name="package_name">app.shacirka.dashboard</string>
+    <string name="custom_url_scheme">app.shacirka.dashboard</string>
+</resources>

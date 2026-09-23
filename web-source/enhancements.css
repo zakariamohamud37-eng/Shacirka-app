@@ -1,0 +1,51 @@
+:root{--ink-3:#66789c}
+[data-theme="dark"]{--ink-3:#8fa2c6}
+.settings-divider{height:1px;background:var(--border);margin:8px 0}
+.storage-summary{font-size:.75rem;line-height:1.5;color:var(--ink-2);padding:6px 2px 10px}
+.settings-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.settings-action{border:1px solid var(--border);background:var(--surface-2);color:var(--ink-2);border-radius:10px;padding:9px 10px;font-size:.76rem;font-weight:800}
+.settings-action:hover{border-color:var(--primary);color:var(--primary)}
+.settings-action.full{width:100%;margin-top:8px}
+.university-pro-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:14px}
+.uni-pro-card{border:1px solid var(--border);border-radius:14px;background:var(--surface-2);padding:13px;min-height:88px}
+.uni-pro-card.wide{grid-column:span 2}
+.uni-pro-label{font-size:.75rem;color:var(--ink-2);font-weight:700}
+.uni-pro-value{font:800 1.35rem/1.2 var(--font-d);margin-top:5px;color:var(--ink)}
+.uni-pro-note{font-size:.72rem;line-height:1.45;color:var(--ink-3);margin-top:5px}
+.uni-pro-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}
+.uni-mini-btn{border:1px solid var(--border);background:var(--surface);color:var(--primary);font-weight:800;font-size:.72rem;border-radius:9px;padding:7px 9px}
+.semester-list{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+.semester-row{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:7px 0;border-top:1px solid var(--border);font-size:.72rem}
+.semester-row strong{display:block;color:var(--ink)}
+.semester-row span{color:var(--ink-3)}
+.university-only-control{display:none}
+body[data-level="university"] .university-only-control{display:block}
+.course-textarea{resize:vertical;line-height:1.45}
+.attendance-editor{display:grid;grid-template-columns:1fr auto auto auto;align-items:center;gap:8px;margin-top:14px;padding:12px;border:1px solid var(--border);border-radius:12px;background:var(--surface-2)}
+.attendance-editor div{display:flex;flex-direction:column;gap:2px;font-size:.78rem}.attendance-editor span{color:var(--ink-3)}
+.attendance-action{padding:8px 10px}.danger-button{color:var(--danger);border-color:var(--danger)}
+.course-resource-links{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.course-resource-links a{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;border:1px solid var(--border);border-radius:9px;background:var(--surface-2);color:var(--primary);padding:6px 9px;font-size:.72rem;font-weight:700;text-decoration:none}
+.conflict-warning{border:1px solid var(--danger);background:var(--danger-pale);color:var(--danger);border-radius:10px;padding:9px 10px;margin-top:10px;font-size:.75rem;font-weight:700}
+.pdf-findbar{display:grid;grid-template-columns:minmax(120px,1fr) auto minmax(145px,auto);gap:7px;padding:8px 12px;border-bottom:1px solid var(--border);background:var(--surface)}
+.pdf-findbar input,.pdf-findbar select{min-width:0;border:1px solid var(--border);border-radius:9px;background:var(--surface-2);color:var(--ink);padding:8px 10px;font:600 .75rem var(--font-b)}
+.pdf-search-status{min-height:0;padding:0 14px;background:var(--surface);font-size:.72rem;color:var(--ink-2)}
+.pdf-search-status:not(:empty){padding:7px 14px;border-bottom:1px solid var(--border)}
+.pdf-page-shell.is-bookmarked{box-shadow:0 0 0 3px var(--primary),var(--shadow-lg)}
+.pdf-page-shell.is-highlighted{box-shadow:0 0 0 4px #f4b400,var(--shadow-lg)}
+.onboarding-panel{max-width:500px;text-align:left}
+.onboarding-step{font-size:.74rem;color:var(--primary);font-weight:800;text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px}
+.onboarding-panel h2{font-size:1.35rem;margin-bottom:7px}
+.onboarding-panel>p{font-size:.88rem;line-height:1.6;color:var(--ink-2);margin-bottom:16px}
+.onboarding-options{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}
+.onboarding-option{border:1px solid var(--border);background:var(--surface-2);color:var(--ink);border-radius:12px;padding:12px;font-weight:800;text-align:left}
+.onboarding-option.selected{border-color:var(--primary);background:var(--primary-pale);color:var(--primary)}
+.onboarding-checklist{display:flex;flex-direction:column;gap:9px}
+.onboarding-check{display:flex;gap:10px;align-items:flex-start;padding:10px;border:1px solid var(--border);border-radius:11px;background:var(--surface-2);font-size:.82rem;line-height:1.45}
+.toast-region{position:fixed;right:18px;bottom:86px;z-index:500;display:flex;flex-direction:column;gap:8px;pointer-events:none}
+.app-toast{max-width:min(360px,calc(100vw - 36px));background:var(--ink);color:var(--surface);border-radius:12px;padding:11px 14px;box-shadow:var(--shadow-lg);font-size:.8rem;font-weight:700;animation:fadeUp .2s ease}
+.subject-card[role="button"]:focus-visible{outline:3px solid var(--primary);outline-offset:3px}
+.form-field-error{border-color:var(--danger)!important;box-shadow:0 0 0 2px var(--danger-pale)}
+.backup-note{font-size:.72rem;color:var(--ink-3);line-height:1.45;margin-top:7px}
+@media(max-width:900px){.university-pro-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.university-pro-grid{grid-template-columns:1fr 1fr}.uni-pro-card.wide{grid-column:1/-1}.pdf-findbar{grid-template-columns:1fr auto}.pdf-findbar select{grid-column:1/-1}.pdf-toolbar{overflow-x:auto;justify-content:flex-start}.attendance-editor{grid-template-columns:1fr 1fr}.attendance-editor div{grid-column:1/-1}.settings-actions{grid-template-columns:1fr}.onboarding-options{grid-template-columns:1fr}.app-shell{padding-left:12px;padding-right:12px}.card{padding:16px}}
+@media(min-width:761px){.bottom-nav{display:none!important}}
