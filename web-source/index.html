@@ -89,6 +89,8 @@ button{font-family:var(--font-b);cursor:pointer;}
 .brand-text .eyebrow{font-size:12.5px;color:var(--ink-3);font-weight:600;letter-spacing:.02em;}
 .brand-text h1{font-size:20px;font-weight:700;margin-top:2px;}
 .brand-text .tag{display:inline-block;margin-top:5px;font-size:11.5px;font-weight:700;color:var(--primary);background:var(--primary-pale);padding:3px 9px;border-radius:20px;}
+.level-picker{margin-top:5px;border:1px solid var(--border);border-radius:10px;background:var(--primary-pale);color:var(--primary);font:700 12px var(--font-b);padding:5px 28px 5px 9px;max-width:100%;cursor:pointer;}
+.university-workspace{display:none;margin-bottom:18px}.university-workspace h2{font-size:17px;margin:0 0 4px}.university-workspace p{font-size:12px;color:var(--ink-3);margin:0 0 12px}.uni-meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.uni-meta label{font-size:11px;font-weight:700;color:var(--ink-2)}.uni-meta input{width:100%;margin-top:5px}.uni-summary{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.uni-summary span{padding:8px 11px;border-radius:10px;background:var(--primary-pale);color:var(--primary);font-size:11px;font-weight:700}body[data-level="university"] .university-workspace{display:block}.course-actions{display:none}body[data-level="university"] .course-actions{display:block}.empty-courses{grid-column:1/-1;color:var(--ink-3);font-size:13px;padding:20px;border:1px dashed var(--border);border-radius:12px;text-align:center}.stat-card[data-view]{cursor:pointer}.stat-card[data-view]:focus-visible{outline:2px solid var(--primary)}
 .topbar-right{display:flex;align-items:center;gap:10px;}
 .datetime{text-align:right;margin-right:4px;display:none;}
 @media(min-width:760px){.datetime{display:block;}}
@@ -151,7 +153,7 @@ button{font-family:var(--font-b);cursor:pointer;}
 .edit-pencil{position:absolute;bottom:10px;right:12px;font-size:12px;opacity:.5;}
 
 /* ---------- Chart (custom SVG, no external libs) ---------- */
-.chart-wrap{height:270px;position:relative;}
+.chart-wrap{height:270px;position:relative;overflow-x:auto;}
 .chart-svg{width:100%;height:100%;display:block;}
 .bar-rect{animation:fadeUp .5s ease both;cursor:pointer;}
 .bar-rect:hover{opacity:.82;}
@@ -165,8 +167,10 @@ button{font-family:var(--font-b);cursor:pointer;}
 .tl-row{position:relative;padding:12px 0 12px 14px;display:flex;gap:14px;align-items:flex-start;}
 .tl-dot{position:absolute;left:-27px;top:14px;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;border:3px solid var(--surface);box-shadow:0 0 0 1px var(--border);}
 .tl-dot.subax{background:#DBEAFE;} .tl-dot.casir{background:#BFDBFE;} .tl-dot.maqrib{background:#1E2A5E;}
+.tl-dot.uni{background:var(--primary-pale);}
 .tl-phase{font-size:11px;font-weight:800;letter-spacing:.02em;text-transform:uppercase;}
 .tl-phase.subax{color:#2563EB;} .tl-phase.casir{color:var(--primary);} .tl-phase.maqrib{color:#1E2A5E;}
+.tl-phase.uni{color:var(--primary);}
 [data-theme="dark"] .tl-phase.maqrib{color:#93B4FF;}
 .tl-subject{font-size:14.5px;font-weight:700;margin-top:2px;}
 .tl-note{font-size:12px;color:var(--ink-3);margin-top:2px;}
@@ -390,6 +394,7 @@ button{font-family:var(--font-b);cursor:pointer;}
  .bottom-nav{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;z-index:100;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom));height:66px;background:color-mix(in srgb,var(--surface) 94%,transparent);backdrop-filter:blur(18px);border:1px solid var(--border);box-shadow:0 12px 35px rgba(15,30,60,.22);border-radius:22px;padding:7px}.bottom-nav button{border:0;background:transparent;color:var(--ink-3);font-size:9.5px;font-weight:800;border-radius:15px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px}.bottom-nav button span{font-size:19px}.bottom-nav button.active{background:var(--primary-pale);color:var(--primary)}
  .pdf-reader-overlay{align-items:stretch}.pdf-reader-panel{height:100%;max-height:none;border-radius:0;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom);transform:translateY(100%)}.pdf-canvas-wrap{padding:8px}.pdf-pages{gap:8px}.pdf-toolbar{gap:6px;padding:8px}.pdf-tool-btn{padding:0 9px}.pdf-box{align-items:flex-start}.pdf-upload{margin-top:2px}
 }
+body[data-level]:not([data-level="university"]) .university-workspace{display:none}
 
 /* ---------- Footer ---------- */
 .footer{margin-top:24px;text-align:center;padding:26px 16px;border-top:1px solid var(--border);}
@@ -420,7 +425,7 @@ button{font-family:var(--font-b);cursor:pointer;}
       <div class="brand-text">
         <p class="eyebrow">Ku soo dhowow mar kale 👋</p>
         <h1>Hage Study</h1>
-        <span class="tag">Form 4 · 2026–2027</span>
+        <select class="level-picker" id="levelSelect" aria-label="Dooro heerka waxbarashada"><option value="form4">Form 4</option><option value="form3">Form 3</option><option value="form2">Form 2</option><option value="form1">Form 1</option><option value="university">University</option></select>
       </div>
     </div>
     <div class="topbar-right">
@@ -458,13 +463,19 @@ button{font-family:var(--font-b);cursor:pointer;}
   <!-- ============ STATS ============ -->
   <section class="stats-grid" id="statsGrid" aria-label="Tirakoobka guud"></section>
 
+  <section class="card university-workspace" data-app-view="home subjects" aria-label="Qorshaha jaamacadda">
+    <h2>🎓 Qorshaha jaamacadda</h2><p>Qor takhasuska iyo semester-ka. Ku dar koorsooyin, jadwal casharro, PDF iyo shaqooyinka la dhiibayo.</p>
+    <div class="uni-meta"><label>Takhasuska<input id="uniMajor" class="select-input" type="text" maxlength="80" placeholder="Tusaale: Computer Science"></label><label>Semester-ka<input id="uniSemester" class="select-input" type="text" maxlength="45" placeholder="Tusaale: Semester 1"></label></div>
+    <div class="uni-summary" id="uniSummary"></div>
+  </section>
+
   <!-- ============ MAIN LAYOUT ============ -->
   <div class="layout">
     <div class="main-col">
 
       <div class="card">
         <div class="card-head">
-          <div><div class="card-title">🗓️ Jadwalka Waxbarashada Toddobaadlaha</div><div class="card-sub">Dooro maalin, kadibna jadwalka wax ka beddel</div></div>
+          <div><div class="card-title" id="scheduleTitle">🗓️ Jadwalka Waxbarashada Toddobaadlaha</div><div class="card-sub">Dooro maalin, kadibna jadwalka wax ka beddel</div></div>
           <button class="schedule-edit-btn" id="editScheduleBtn">✏️ Beddel jadwalka</button>
         </div>
         <div class="schedule-tabs" id="scheduleTabs"></div>
@@ -473,9 +484,10 @@ button{font-family:var(--font-b);cursor:pointer;}
 
       <div class="card">
         <div class="card-head">
-          <div><div class="card-title">📚 Maadooyinka</div><div class="card-sub">12 maado — guji mid si aad wax uga beddesho</div></div>
+          <div><div class="card-title" id="subjectsTitle">📚 Maadooyinka</div><div class="card-sub" id="subjectsSubtitle">Guji maado si aad wax uga beddesho</div></div>
           <span class="pill-count" id="subjectsAvg">—</span>
         </div>
+        <div class="course-actions"><button class="schedule-edit-btn" id="addCourseBtn" type="button">＋ Ku dar koorso</button></div>
         <div class="subjects-grid" id="subjectsGrid"></div>
       </div>
 
@@ -488,10 +500,11 @@ button{font-family:var(--font-b);cursor:pointer;}
 
       <div class="card">
         <div class="card-head">
-          <div><div class="card-title">🧾 Shaqooyinka Guriga &amp; Xaaladda Gudbinta</div><div class="card-sub">Calaamadi shaqada marka aad dhammaystirto</div></div>
+          <div><div class="card-title" id="homeworkTitle">🧾 Shaqooyinka Guriga &amp; Xaaladda Gudbinta</div><div class="card-sub" id="homeworkSubtitle">Calaamadi shaqada marka aad dhammaystirto</div></div>
           <span class="pill-count" id="hwCount">—</span>
         </div>
         <div class="hw-list" id="hwList"></div>
+        <div class="mini-form"><input class="mini-input" id="hwTaskInput" type="text" maxlength="120" placeholder="Shaqo ama assignment cusub"><select class="mini-input" id="hwSubjectInput" aria-label="Dooro maado"></select><input class="mini-input mini-date" id="hwDueInput" type="date" aria-label="Maalinta gudbinta"><button class="add-btn" id="hwAddBtn" type="button" aria-label="Ku dar shaqo">＋</button></div>
         <div class="hw-progress-bar">
           <div class="progress-text"><span>Horumarka guud ee shaqooyinka</span><span id="hwPercentText">—</span></div>
           <div class="progress-track"><div class="progress-fill" id="hwPercentBar" style="width:0%"></div></div>
@@ -526,7 +539,7 @@ button{font-family:var(--font-b);cursor:pointer;}
       </div>
 
       <div class="card">
-        <div class="card-head"><div><div class="card-title">🚩 Tirinta Imtixaanada</div><div class="card-sub">Ku dar imtixaannadaada — waa la kaydiyaa</div></div></div>
+        <div class="card-head"><div><div class="card-title" id="examsTitle">🚩 Tirinta Imtixaanada</div><div class="card-sub" id="examsSubtitle">Ku dar imtixaannadaada — waa la kaydiyaa</div></div></div>
         <div class="countdown-hero" id="examHero"></div>
         <div id="examList"></div>
       </div>
@@ -610,7 +623,7 @@ button{font-family:var(--font-b);cursor:pointer;}
 
   <footer class="footer">
     <div class="foot-name">Hage Study</div>
-    <div class="foot-class">Fasalka: Form 4 · Sanad Dugsiyeedka 2026–2027</div>
+    <div class="foot-class" id="footClass">Heerka waxbarashada: Form 4</div>
     <p class="foot-quote">"Diiradda saar waxbarashadaada. Kulan kasta oo waxbarasho wuxuu kuu dhoweynayaa guusha."</p>
     <div class="foot-year">© 2026 · Dashboard-ka Ardayga Hage Study</div>
   </footer>
@@ -634,7 +647,7 @@ button{font-family:var(--font-b);cursor:pointer;}
     <div class="modal-range-value" id="modalProgressValue">0%</div>
     <label class="modal-label">Darajada</label>
     <select id="modalGradeSelect" class="select-input">
-      <option>A+</option><option>A</option><option>A-</option><option>B+</option><option>B</option><option>B-</option><option>C+</option><option>C</option><option>C-</option><option>D</option>
+      <option value="—">Weli lama qiimeyn</option><option>A+</option><option>A</option><option>A-</option><option>B+</option><option>B</option><option>B-</option><option>C+</option><option>C</option><option>C-</option><option>D</option>
     </select>
     <label class="modal-label">Heerka Waxbarashada</label>
     <div class="segmented" id="modalStatusSeg">
@@ -642,6 +655,7 @@ button{font-family:var(--font-b);cursor:pointer;}
       <button data-v="progress" type="button">Socda</button>
       <button data-v="done" type="button">La Dhammeeyay</button>
     </div>
+    <div id="universityCourseFields" style="display:none"><label class="modal-label">Magaca koorsada</label><input id="modalCourseName" class="select-input" maxlength="90"><label class="modal-label">Credit hours</label><input id="modalCourseCredits" class="select-input" type="number" min="0" max="30" step="1"><label class="modal-label">Macallin ama lecturer</label><input id="modalCourseLecturer" class="select-input" maxlength="90"><label class="modal-label">Qolka / goobta</label><input id="modalCourseRoom" class="select-input" maxlength="90"><button id="deleteCourseBtn" class="btn btn-ghost" type="button" style="margin-top:12px">Ka saar koorsada</button></div>
     <label class="modal-label">Buugga PDF-ga</label>
     <div class="pdf-box">
       <div class="pdf-file-icon">PDF</div>
@@ -684,6 +698,8 @@ button{font-family:var(--font-b);cursor:pointer;}
   </div>
 </div>
 
+<div class="modal-overlay" id="courseModalOverlay"><div class="modal-panel"><div class="modal-head"><div class="modal-ico">🎓</div><div><div class="modal-title">Ku dar koorso</div><div class="modal-sub">Koorsooyinkaaga jaamacadda</div></div><button class="modal-close" id="courseCloseBtn" type="button" aria-label="Xir">✕</button></div><label class="modal-label">Magaca koorsada</label><input id="courseNameInput" class="select-input" maxlength="90" placeholder="Tusaale: Data Structures"><label class="modal-label">Credit hours</label><input id="courseCreditsInput" class="select-input" type="number" min="0" max="30" step="1" value="3"><label class="modal-label">Macallin ama lecturer</label><input id="courseLecturerInput" class="select-input" maxlength="90" placeholder="Ikhtiyaari"><label class="modal-label">Qolka / goobta</label><input id="courseRoomInput" class="select-input" maxlength="90" placeholder="Ikhtiyaari"><div class="modal-actions"><button class="btn btn-ghost" id="courseCancelBtn" type="button">Jooji</button><button class="btn btn-primary" id="courseSaveBtn" type="button">Ku dar koorsada</button></div></div></div>
+
 <div class="modal-overlay" id="installModalOverlay">
  <div class="modal-panel"><div class="modal-head"><div class="modal-ico">📲</div><div><div class="modal-title">Ku rakib telefoonka</div><div class="modal-sub">Android iyo iPhone</div></div><button class="modal-close" id="installCloseBtn">✕</button></div><p style="font-size:13px;line-height:1.7;color:var(--ink-2);margin-top:14px"><b>iPhone:</b> Safari ka fur, taabo Share, kadib dooro <b>Add to Home Screen</b>.<br><br><b>Android:</b> Chrome ka fur, taabo menu-ga ⋮, kadib dooro <b>Install app</b> ama <b>Add to Home screen</b>.</p><div class="modal-actions"><button class="btn btn-primary" id="installDoneBtn">Waan fahmay</button></div></div>
 </div>
@@ -697,19 +713,16 @@ const SOM_MONTHS = ["Jannaayo","Febraayo","Maarso","Abriil","May","Juun","Luulyo
 const SUBJ_TINTS = ["#2454FF","#0EA5B7","#3B82F6","#0891B2","#1D4ED8","#06B6D4"];
 
 const SUBJECTS_DEFAULT = [
-  {name:"Fiisigis", sub:"Physics", short:"Fiisigis", ico:"⚛️", progress:74, grade:"B+", status:"progress"},
-  {name:"Xisaabta", sub:"Mathematics", short:"Xisaabta", ico:"📐", progress:88, grade:"A-", status:"progress"},
-  {name:"Bayoolaji", sub:"Biology", short:"Bayoolaji", ico:"🧬", progress:65, grade:"B", status:"progress"},
-  {name:"Kimistariga", sub:"Chemistry", short:"Kimistarig", ico:"🧪", progress:70, grade:"B+", status:"progress"},
-  {name:"Taariikhda", sub:"History", short:"Taariikhda", ico:"🏛️", progress:92, grade:"A", status:"done"},
-  {name:"Juqraafiga", sub:"Geography", short:"Juqraafig", ico:"🌍", progress:58, grade:"C+", status:"progress"},
-  {name:"Teknoolajiyada", sub:"Technology", short:"Tekno", ico:"💻", progress:80, grade:"A-", status:"progress"},
-  {name:"Ganacsiga", sub:"Business", short:"Ganacsiga", ico:"📊", progress:76, grade:"B+", status:"progress"},
-  {name:"Diinta Islaamka", sub:"Islamic Studies", short:"Islaamka", ico:"🕌", progress:95, grade:"A", status:"done"},
-  {name:"Af Carabi", sub:"Arabic", short:"Carabi", ico:"✒️", progress:83, grade:"A-", status:"progress"},
-  {name:"Af Ingiriisi", sub:"English", short:"Ingiriisi", ico:"📖", progress:69, grade:"B", status:"progress"},
-  {name:"Af Soomaali", sub:"Somali", short:"Soomaali", ico:"📗", progress:90, grade:"A", status:"done"},
+  {name:"Physics", ico:"⚛️"}, {name:"Math", ico:"📐"},
+  {name:"Chemistry", ico:"🧪"}, {name:"Biology", ico:"🧬"},
+  {name:"Technology", ico:"💻"}, {name:"Arabic", ico:"✒️"},
+  {name:"Islamic", ico:"🕌"}, {name:"English", ico:"📖"},
+  {name:"Somali", ico:"📗"}, {name:"Business", ico:"📊"},
+  {name:"History", ico:"🏛️"}, {name:"Geography", ico:"🌍"},
 ];
+const SCHOOL_NAME_MAP={"Fiisigis":"Physics","Xisaabta":"Math","Kimistariga":"Chemistry","Bayoolaji":"Biology","Teknoolajiyada":"Technology","Af Carabi":"Arabic","Diinta Islaamka":"Islamic","Af Ingiriisi":"English","Af Soomaali":"Somali","Ganacsiga":"Business","Taariikhda":"History","Juqraafiga":"Geography"};
+const LEVEL_NAMES={form4:"Form 4",form3:"Form 3",form2:"Form 2",form1:"Form 1",university:"University"};
+const ALL_DAYS=["Sabti","Axad","Isniin","Talaado","Arbaco","Khamiis","Jimce"];
 
 const SCHEDULE = {
   Sabti:[{phase:"subax",label:"Salaadda Subax kadib",subject:"Xisaabta"},{phase:"casir",label:"Casir kadib",subject:"Af Ingiriisi"},{phase:"maqrib",label:"Salaadda Maqrib kadib",subject:"Taariikhda"}],
@@ -796,23 +809,28 @@ const ICO_TREND='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stro
    PERSISTENT STATE (window.storage, personal / not shared)
 =============================================================*/
 const STORAGE_KEY = "shacirka-dashboard-state-v1";
+const PROFILE_STORE_KEY = "hage-study-profiles-v1",ACTIVE_LEVEL_KEY="hage-study-level-v1";
+let PROFILE_STATES = {}, ACTIVE_LEVEL = "form4";
 let STATE = null;
 
 function clone(x){ return JSON.parse(JSON.stringify(x)); }
-function buildDefaultState(){
+function buildDefaultState(level="form4"){
+  const university=level==="university";
   return {
-    subjects: clone(SUBJECTS_DEFAULT),
-    homework: clone(HOMEWORK_DEFAULT),
-    exams: clone(EXAMS_DEFAULT),
-    goals: clone(GOALS_DEFAULT),
-    todos: clone(TODOS_DEFAULT),
-    notes: clone(NOTES_DEFAULT),
+    subjects: university ? [] : SUBJECTS_DEFAULT.map((s,i)=>({...s,id:"school-"+i,short:s.name.slice(0,9),sub:"",progress:0,grade:"—",status:"new"})),
+    homework: [],
+    exams: [],
+    goals: [],
+    todos: [],
+    notes: [],
     deadlinesCustom: [],
     deadlinesDismissedExamIds: [],
     todayPlanChecked: {},
     todayPlanCustom: [],
-    streakYear: null,
-    schedule: clone(SCHEDULE),
+    streakYear: [],
+    studyLog: {},
+    schedule: university ? Object.fromEntries(ALL_DAYS.map(d=>[d,[]])) : clone(SCHEDULE),
+    university: {major:"",semester:""},
     profileImage: null,
     notificationsEnabled: false,
     notificationLog: [],
@@ -830,22 +848,51 @@ function safeStorageSet(key,value){
   catch(e){ console.error("Kaydinta way fashilantay:",e); return false; }
 }
 async function loadState(){
-  let parsed = null;
-  const raw = safeStorageGet(STORAGE_KEY);
-  if(raw){ try{ parsed = JSON.parse(raw); }catch(e){ parsed = null; } }
-  STATE = parsed || buildDefaultState();
-  const def = buildDefaultState();
-  Object.keys(def).forEach(k=>{ if(!(k in STATE) || STATE[k]===undefined){ STATE[k]=def[k]; } });
-  const defaultTimes={subax:"05:30",casir:"16:00",maqrib:"19:00"};
-  Object.values(STATE.schedule).flat().forEach(r=>{if(!r.time)r.time=defaultTimes[r.phase]||"16:00"});
-  STATE.exams.forEach(e=>{if(!e.time)e.time="08:00"});
-  if(!STATE.streakYear){ STATE.streakYear = generateStreakYear(); }
+  try{ PROFILE_STATES=JSON.parse(safeStorageGet(PROFILE_STORE_KEY)||"{}"); }catch(e){ PROFILE_STATES={}; }
+  if(!PROFILE_STATES||typeof PROFILE_STATES!=="object"||Array.isArray(PROFILE_STATES))PROFILE_STATES={};
+  if(!PROFILE_STATES.form4){
+    try{ PROFILE_STATES.form4=JSON.parse(safeStorageGet(STORAGE_KEY)||"null")||buildDefaultState("form4"); }
+    catch(e){ PROFILE_STATES.form4=buildDefaultState("form4"); }
+  }
+  ACTIVE_LEVEL=LEVEL_NAMES[safeStorageGet(ACTIVE_LEVEL_KEY)]?safeStorageGet(ACTIVE_LEVEL_KEY):"form4";
+  STATE=normalizeState(PROFILE_STATES[ACTIVE_LEVEL]||buildDefaultState(ACTIVE_LEVEL),ACTIVE_LEVEL);
+  PROFILE_STATES[ACTIVE_LEVEL]=STATE;
   saveState();
+}
+function normalizeState(state,level){
+  if(!state||typeof state!=="object"||Array.isArray(state))state=buildDefaultState(level);
+  const def=buildDefaultState(level);
+  for(const [key,value] of Object.entries(def))if(state[key]===undefined)state[key]=value;
+  for(const key of ["subjects","homework","exams","goals","todos","notes","deadlinesCustom","deadlinesDismissedExamIds","todayPlanCustom","notificationLog"])
+    if(!Array.isArray(state[key]))state[key]=clone(def[key]);
+  if(!state.schedule||typeof state.schedule!=="object")state.schedule=clone(def.schedule);
+  if(!state.university||typeof state.university!=="object")state.university={major:"",semester:""};
+  if(!state.studyLog||typeof state.studyLog!=="object")state.studyLog={};
+  if(level!=="university"){
+    for(const [i,s] of state.subjects.entries()){
+      const name=SCHOOL_NAME_MAP[s.name]||s.name;
+      s.name=name;s.short=name.slice(0,9);s.sub="";s.id ||= "school-"+i;
+    }
+    for(const rows of Object.values(state.schedule))for(const row of rows)row.subject=SCHOOL_NAME_MAP[row.subject]||row.subject;
+    for(const row of state.homework)row.subject=SCHOOL_NAME_MAP[row.subject]||row.subject;
+    for(const row of state.exams)row.subject=SCHOOL_NAME_MAP[row.subject]||row.subject;
+  }
+  const defaultTimes={subax:"05:30",casir:"16:00",maqrib:"19:00"};
+  for(const rows of Object.values(state.schedule))if(Array.isArray(rows))for(const row of rows)row.time ||= defaultTimes[row.phase]||"16:00";
+  for(const e of state.exams)e.time ||= "08:00";
+  return state;
+}
+function persistActiveState(){
+  PROFILE_STATES[ACTIVE_LEVEL]=STATE;
+  safeStorageSet(PROFILE_STORE_KEY,JSON.stringify(PROFILE_STATES));
+  safeStorageSet(ACTIVE_LEVEL_KEY,ACTIVE_LEVEL);
+  // Keep the original Form 4 key for updates from older installed versions.
+  if(ACTIVE_LEVEL==="form4")safeStorageSet(STORAGE_KEY,JSON.stringify(STATE));
 }
 let saveTimer=null;
 function saveState(){
   clearTimeout(saveTimer);
-  saveTimer = setTimeout(()=>{ safeStorageSet(STORAGE_KEY, JSON.stringify(STATE)); schedulePushSync(); }, 250);
+  saveTimer = setTimeout(()=>{ persistActiveState();schedulePushSync(); }, 250);
 }
 
 /* Profile photo, resized before local storage so it remains fast on phones. */
@@ -891,9 +938,21 @@ async function pdfDbAction(mode,action){
   const db=await openPdfDb();
   return new Promise((resolve,reject)=>{const tx=db.transaction(PDF_STORE,mode),store=tx.objectStore(PDF_STORE),req=action(store);req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error);tx.oncomplete=()=>db.close();});
 }
-const getSubjectPdf=subject=>pdfDbAction("readonly",store=>store.get(subject));
-const saveSubjectPdf=record=>pdfDbAction("readwrite",store=>store.put(record));
-const deleteSubjectPdf=subject=>pdfDbAction("readwrite",store=>store.delete(subject));
+function pdfStorageKey(subject){const item=STATE.subjects.find(s=>s.name===subject);return ACTIVE_LEVEL+"::"+(item?.id||subject);}
+async function getSubjectPdf(subject){
+  const scoped=pdfStorageKey(subject);
+  let record=await pdfDbAction("readonly",store=>store.get(scoped));
+  if(!record&&ACTIVE_LEVEL==="form4"){
+    const oldName=Object.keys(SCHOOL_NAME_MAP).find(k=>SCHOOL_NAME_MAP[k]===subject);
+    for(const oldKey of [subject,oldName].filter(Boolean)){
+      const legacy=await pdfDbAction("readonly",store=>store.get(oldKey));
+      if(legacy){record={...legacy,subject:scoped,displayName:subject};await pdfDbAction("readwrite",store=>store.put(record));await pdfDbAction("readwrite",store=>store.delete(oldKey));break;}
+    }
+  }
+  return record&&{...record,subject};
+}
+const saveSubjectPdf=record=>pdfDbAction("readwrite",store=>store.put({...record,subject:pdfStorageKey(record.subject),displayName:record.subject}));
+const deleteSubjectPdf=subject=>pdfDbAction("readwrite",store=>store.delete(pdfStorageKey(subject)));
 
 /* ============================================================
    THEME
@@ -960,12 +1019,15 @@ let statsFirstRender = true;
 function computeStatsData(){
   const avg = STATE.subjects.length ? Math.round(STATE.subjects.reduce((a,s)=>a+s.progress,0)/STATE.subjects.length) : 0;
   const pending = STATE.homework.filter(h=>h.status!=="submitted").length;
+  const upcoming=STATE.exams.filter(e=>e.date&&daysUntil(e.date)>=0).length;
+  const university=ACTIVE_LEVEL==="university";
+  const credits=STATE.subjects.reduce((sum,s)=>sum+(Number(s.credits)||0),0);
   return [
-    {label:"Maadooyinka Guud", value:STATE.subjects.length, suffix:"", color:"var(--primary)", bg:"var(--primary-pale)", svg:ICO_BOOK},
-    {label:"Shaqooyinka La Sugayo", value:pending, suffix:"", color:"var(--warning)", bg:"var(--warning-pale)", svg:ICO_CLIP},
-    {label:"Imtixaannada Soo Socda", value:STATE.exams.length, suffix:"", color:"var(--danger)", bg:"var(--danger-pale)", svg:ICO_FLAG},
-    {label:"Imaanshaha (%)", value:94, suffix:"%", color:"var(--success)", bg:"var(--success-pale)", svg:ICO_CHECK},
-    {label:"Horumarka Guud (%)", value:avg, suffix:"%", color:"var(--teal)", bg:"var(--teal-pale)", svg:ICO_TREND},
+    {label:university?"Koorsooyinka":"Maadooyinka Guud",value:STATE.subjects.length,suffix:"",color:"var(--primary)",bg:"var(--primary-pale)",svg:ICO_BOOK,view:"subjects"},
+    {label:university?"Assignments sugaya":"Shaqooyinka La Sugayo",value:pending,suffix:"",color:"var(--warning)",bg:"var(--warning-pale)",svg:ICO_CLIP,view:"tasks"},
+    {label:"Imtixaannada Soo Socda",value:upcoming,suffix:"",color:"var(--danger)",bg:"var(--danger-pale)",svg:ICO_FLAG,view:"plan"},
+    {label:university?"Credit hours":"Maadooyinka la Dhammeeyay",value:university?credits:STATE.subjects.filter(s=>s.status==="done").length,suffix:"",color:"var(--success)",bg:"var(--success-pale)",svg:ICO_CHECK,view:"subjects"},
+    {label:"Horumarka Guud (%)",value:avg,suffix:"%",color:"var(--teal)",bg:"var(--teal-pale)",svg:ICO_TREND,view:"subjects"},
   ];
 }
 function animateCount(el, target, suffix){
@@ -975,11 +1037,16 @@ function animateCount(el, target, suffix){
 function renderStats(){
   const data = computeStatsData();
   document.getElementById("statsGrid").innerHTML = data.map((s,i)=>`
-    <div class="stat-card"><div class="stat-ico" style="background:${s.bg};color:${s.color}">${s.svg}</div>
+    <div class="stat-card" data-view="${s.view}" role="button" tabindex="0" aria-label="${s.label}: ${s.value}${s.suffix}. Fur qaybta"><div class="stat-ico" style="background:${s.bg};color:${s.color}">${s.svg}</div>
       <div><div class="stat-value" id="statVal${i}">0${s.suffix}</div><div class="stat-label">${s.label}</div></div></div>`).join("");
   data.forEach((s,i)=>{
     const el = document.getElementById("statVal"+i);
     if(statsFirstRender) animateCount(el, s.value, s.suffix); else el.textContent = s.value+s.suffix;
+  });
+  document.querySelectorAll(".stat-card[data-view]").forEach(card=>{
+    const go=()=>document.querySelector(`.bottom-nav button[data-view="${card.dataset.view}"]`)?.click();
+    card.addEventListener("click",go);
+    card.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();go();}});
   });
   statsFirstRender = false;
 }
@@ -991,22 +1058,55 @@ function renderSubjects(){
   const grid = document.getElementById("subjectsGrid");
   const avg = STATE.subjects.length ? Math.round(STATE.subjects.reduce((a,s)=>a+s.progress,0)/STATE.subjects.length) : 0;
   const statusMap = {progress:["status-progress","Socda"], done:["status-done","La Dhammeeyay"], new:["status-new","Aan la Bilaabin"]};
-  grid.innerHTML = STATE.subjects.map((s,i)=>{
+  grid.innerHTML = STATE.subjects.length ? STATE.subjects.map((s,i)=>{
     const tint = SUBJ_TINTS[i % SUBJ_TINTS.length];
     const [statusClass,statusLabel] = statusMap[s.status] || statusMap.progress;
     return `<div class="subject-card" data-i="${i}" title="Guji si aad wax uga beddesho">
-      <div class="subject-top"><div class="subject-ico" style="background:${tint}22;">${s.ico}</div><span class="grade-pill" style="background:${tint}22;color:${tint}">${s.grade}</span></div>
-      <div class="subject-name">${s.name}</div><div class="subject-sub">${s.sub}</div>
+      <div class="subject-top"><div class="subject-ico" style="background:${tint}22;">${escapeHtml(s.ico)}</div><span class="grade-pill" style="background:${tint}22;color:${tint}">${escapeHtml(s.grade||"—")}</span></div>
+      <div class="subject-name">${escapeHtml(s.name)}</div><div class="subject-sub">${ACTIVE_LEVEL==="university"?escapeHtml([s.credits?`${s.credits} credits`:"",s.lecturer||""].filter(Boolean).join(" · ")):escapeHtml(s.sub||"")}</div>
       <div class="progress-track"><div class="progress-fill" style="width:0%;background:linear-gradient(90deg,${tint},var(--teal))" data-w="${s.progress}"></div></div>
       <div class="progress-text"><span>Horumarka</span><span>${s.progress}%</span></div>
       <span class="status-pill ${statusClass}">${statusLabel}</span>
       <span class="edit-pencil">✎</span>
     </div>`;
-  }).join("");
+  }).join("") : '<div class="empty-courses">Weli koorso maadan darin. Taabo “Ku dar koorso” si aad u bilowdo jadwalka jaamacadda.</div>';
   document.getElementById("subjectsAvg").textContent = "Celceliska: "+avg+"%";
   requestAnimationFrame(()=>{ grid.querySelectorAll(".progress-fill").forEach(el=>{ el.style.width = el.dataset.w+"%"; }); });
   grid.querySelectorAll(".subject-card").forEach(c=> c.addEventListener("click", ()=> openSubjectModal(parseInt(c.dataset.i))));
 }
+function renderUniversitySummary(){
+  const summary=document.getElementById("uniSummary");
+  if(ACTIVE_LEVEL!=="university"){summary.innerHTML="";return;}
+  const credits=STATE.subjects.reduce((sum,s)=>sum+(Number(s.credits)||0),0);
+  const due=STATE.homework.filter(h=>h.status!=="submitted"&&daysUntil(h.due)>=0&&daysUntil(h.due)<=7).length;
+  const exams=STATE.exams.filter(e=>e.date&&daysUntil(e.date)>=0).length;
+  summary.innerHTML=`<span>${STATE.subjects.length} koorso</span><span>${credits} credit hours</span><span>${due} assignment 7 maalmood gudahood</span><span>${exams} imtixaan soo socda</span>`;
+}
+function closeCourseModal(){document.getElementById("courseModalOverlay").classList.remove("open");}
+document.getElementById("addCourseBtn").addEventListener("click",()=>{
+  document.getElementById("courseNameInput").value="";document.getElementById("courseCreditsInput").value="3";
+  document.getElementById("courseLecturerInput").value="";document.getElementById("courseRoomInput").value="";
+  document.getElementById("courseModalOverlay").classList.add("open");document.getElementById("courseNameInput").focus();
+});
+document.getElementById("courseCloseBtn").addEventListener("click",closeCourseModal);
+document.getElementById("courseCancelBtn").addEventListener("click",closeCourseModal);
+document.getElementById("courseSaveBtn").addEventListener("click",()=>{
+  if(ACTIVE_LEVEL!=="university")return;
+  const name=document.getElementById("courseNameInput").value.trim();
+  if(!name||STATE.subjects.some(s=>s.name.toLowerCase()===name.toLowerCase())){alert("Geli magac koorso oo cusub.");return;}
+  STATE.subjects.push({id:uid("course"),name,short:name.slice(0,10),sub:"",ico:"📘",credits:Math.min(30,Math.max(0,Number(document.getElementById("courseCreditsInput").value)||0)),lecturer:document.getElementById("courseLecturerInput").value.trim(),room:document.getElementById("courseRoomInput").value.trim(),progress:0,grade:"—",status:"new"});
+  saveState();renderSubjects();renderStats();renderChart();renderHomework();renderUniversitySummary();closeCourseModal();
+});
+document.getElementById("deleteCourseBtn").addEventListener("click",async()=>{
+  if(ACTIVE_LEVEL!=="university"||editingIndex===null)return;
+  const name=STATE.subjects[editingIndex].name;
+  if(!confirm(`Ka saar ${name}, jadwalkiisa, shaqooyinkiisa, imtixaannadiisa iyo PDF-giisa?`))return;
+  await deleteSubjectPdf(name);
+  STATE.subjects.splice(editingIndex,1);
+  for(const [day,rows] of Object.entries(STATE.schedule))STATE.schedule[day]=rows.filter(r=>r.subject!==name);
+  STATE.homework=STATE.homework.filter(h=>h.subject!==name);STATE.exams=STATE.exams.filter(e=>e.subject!==name);
+  saveState();closeSubjectModal();renderSubjects();renderStats();renderChart();renderSchedule(document.querySelector(".tab-btn.active")?.dataset.day||"Sabti");renderTodayPlan();renderHomework();renderExams();renderDeadlines();renderUniversitySummary();
+});
 
 let editingIndex = null;
 function openSubjectModal(i){
@@ -1018,6 +1118,13 @@ function openSubjectModal(i){
   document.getElementById("modalProgressRange").value = s.progress;
   document.getElementById("modalProgressValue").textContent = s.progress+"%";
   document.getElementById("modalGradeSelect").value = s.grade;
+  document.getElementById("universityCourseFields").style.display=ACTIVE_LEVEL==="university"?"block":"none";
+  if(ACTIVE_LEVEL==="university"){
+    document.getElementById("modalCourseName").value=s.name;
+    document.getElementById("modalCourseCredits").value=s.credits||0;
+    document.getElementById("modalCourseLecturer").value=s.lecturer||"";
+    document.getElementById("modalCourseRoom").value=s.room||"";
+  }
   document.querySelectorAll("#modalStatusSeg button").forEach(b=> b.classList.toggle("active", b.dataset.v===s.status));
   document.getElementById("subjectModalOverlay").classList.add("open");
   renderSubjectPdfBox(s.name);
@@ -1147,12 +1254,24 @@ window.addEventListener("resize",()=>{if(!openPdfDocument)return;clearTimeout(pd
 document.getElementById("modalSaveBtn").addEventListener("click", ()=>{
   if(editingIndex===null) return;
   const s = STATE.subjects[editingIndex];
+  if(ACTIVE_LEVEL==="university"){
+    const name=document.getElementById("modalCourseName").value.trim();
+    if(!name||STATE.subjects.some((other,i)=>i!==editingIndex&&other.name.toLowerCase()===name.toLowerCase())){alert("Magaca koorsada waa inuu gaar ahaadaa.");return;}
+    const oldName=s.name;s.name=name;s.short=name.slice(0,10);
+    s.credits=Math.min(30,Math.max(0,Number(document.getElementById("modalCourseCredits").value)||0));
+    s.lecturer=document.getElementById("modalCourseLecturer").value.trim();
+    s.room=document.getElementById("modalCourseRoom").value.trim();
+    if(oldName!==name){
+      for(const rows of Object.values(STATE.schedule))for(const row of rows)if(row.subject===oldName)row.subject=name;
+      for(const row of [...STATE.homework,...STATE.exams])if(row.subject===oldName)row.subject=name;
+    }
+  }
   s.progress = parseInt(document.getElementById("modalProgressRange").value,10);
   s.grade = document.getElementById("modalGradeSelect").value;
   const activeBtn = document.querySelector("#modalStatusSeg button.active");
-  if(activeBtn) s.status = activeBtn.dataset.v;
+  if(activeBtn){if(s.status!=="done"&&activeBtn.dataset.v==="done")recordStudyActivity();s.status = activeBtn.dataset.v;}
   saveState();
-  renderSubjects(); renderChart(); renderStats();
+  renderSubjects(); renderChart(); renderStats();renderUniversitySummary();renderSchedule(document.querySelector(".tab-btn.active")?.dataset.day||"Sabti");renderHomework();renderExams();
   closeSubjectModal();
 });
 
@@ -1163,7 +1282,8 @@ function renderChart(){
   const subs = STATE.subjects;
   const gradeScore={"A+":100,"A":95,"A-":90,"B+":85,"B":80,"B-":75,"C+":70,"C":65,"C-":60,"D":50};
   const n = subs.length;
-  const W=760,H=260,padTop=18,padBottom=70,padLeft=34,padRight=14;
+  if(!n){document.getElementById("chartWrap").innerHTML='<div class="empty-courses">Garaafku wuxuu soo muuqanayaa marka koorso lagu daro.</div>';return;}
+  const W=Math.max(760,n*64),H=260,padTop=18,padBottom=70,padLeft=34,padRight=14;
   const chartTop=padTop, chartBottom=H-padBottom, chartLeft=padLeft, chartRight=W-padRight;
   const barGap=8;
   const barAreaW = chartRight-chartLeft;
@@ -1176,17 +1296,17 @@ function renderChart(){
     yLabels += `<text x="${chartLeft-8}" y="${(y+3).toFixed(1)}" text-anchor="end" font-size="9" font-weight="700" fill="var(--ink-3)">${mark.label}</text>`;
   });
   subs.forEach((s,i)=>{
-    const score=gradeScore[s.grade]||50;
+    const score=gradeScore[s.grade]||0;
     const x = chartLeft+i*(barW+barGap);
     const h = (score/100)*(chartBottom-chartTop);
     const y = chartBottom-h;
     const cx = x+barW/2;
     const color = SUBJ_TINTS[i%SUBJ_TINTS.length];
-    bars += `<rect class="bar-rect" x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${barW.toFixed(1)}" height="${h.toFixed(1)}" rx="6" fill="${color}" style="animation-delay:${i*45}ms"><title>${s.name}: ${s.grade}</title></rect>`;
-    values += `<text x="${cx.toFixed(1)}" y="${(y-6).toFixed(1)}" text-anchor="middle" font-size="10" font-weight="800" fill="var(--ink-2)">${s.grade}</text>`;
-    labels += `<text x="${cx.toFixed(1)}" y="${(chartBottom+14).toFixed(1)}" text-anchor="end" font-size="9.5" fill="var(--ink-3)" transform="rotate(-42 ${cx.toFixed(1)} ${(chartBottom+14).toFixed(1)})">${s.short}</text>`;
+    bars += `<rect class="bar-rect" x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${barW.toFixed(1)}" height="${h.toFixed(1)}" rx="6" fill="${color}" style="animation-delay:${i*45}ms"><title>${escapeHtml(s.name)}: ${escapeHtml(s.grade||"—")}</title></rect>`;
+    values += `<text x="${cx.toFixed(1)}" y="${(y-6).toFixed(1)}" text-anchor="middle" font-size="10" font-weight="800" fill="var(--ink-2)">${escapeHtml(s.grade||"—")}</text>`;
+    labels += `<text x="${cx.toFixed(1)}" y="${(chartBottom+14).toFixed(1)}" text-anchor="end" font-size="9.5" fill="var(--ink-3)" transform="rotate(-42 ${cx.toFixed(1)} ${(chartBottom+14).toFixed(1)})">${escapeHtml(s.short||s.name.slice(0,9))}</text>`;
   });
-  document.getElementById("chartWrap").innerHTML = `<svg class="chart-svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">${gridLines}${yLabels}${bars}${values}${labels}</svg>`;
+  document.getElementById("chartWrap").innerHTML = `<svg class="chart-svg" style="width:${W}px;max-width:none" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">${gridLines}${yLabels}${bars}${values}${labels}</svg>`;
 }
 
 /* ============================================================
@@ -1194,17 +1314,17 @@ function renderChart(){
 =============================================================*/
 function renderSchedule(day){
   document.querySelectorAll(".tab-btn").forEach(b=> b.classList.toggle("active", b.dataset.day===day));
-  const rows = STATE.schedule[day];
-  document.getElementById("timelineBody").innerHTML = rows.map(r=>{
+  const rows = STATE.schedule[day]||[];
+  document.getElementById("timelineBody").innerHTML = rows.length ? rows.map(r=>{
     const free = r.free ? " free" : "";
-    const icon = r.free ? "🌙" : PHASE_ICO[r.phase];
-    const noteHtml = r.note ? `<div class="tl-note">${r.note}</div>` : (r.free ? `<div class="tl-note">Nasasho — waqti aad ku qaadan karto cibaadada iyo raaxaysiga</div>` : "");
-    return `<div class="tl-row${free}"><div class="tl-dot ${r.phase}">${icon}</div>
-      <div><div class="tl-phase ${r.phase}">${r.label} · ${r.time||"--:--"}</div><div class="tl-subject">${r.free ? "Xilli Fasax" : subjIcon(r.subject)+" "+r.subject}</div>${noteHtml}</div></div>`;
-  }).join("");
+    const icon = r.free ? "🌙" : (PHASE_ICO[r.phase]||"📅");
+    const noteHtml = r.note ? `<div class="tl-note">${escapeHtml(r.note)}</div>` : (r.free ? `<div class="tl-note">Nasasho</div>` : "");
+    return `<div class="tl-row${free}"><div class="tl-dot ${ACTIVE_LEVEL==="university"?"uni":r.phase}">${icon}</div>
+      <div><div class="tl-phase ${ACTIVE_LEVEL==="university"?"uni":r.phase}">${escapeHtml(r.label||"Cashar")} · ${escapeHtml(r.time||"--:--")}</div><div class="tl-subject">${r.free ? "Xilli Fasax" : subjIcon(r.subject)+" "+escapeHtml(r.subject)}</div>${noteHtml}</div></div>`;
+  }).join("") : `<div class="empty-courses">${ACTIVE_LEVEL==="university"?"Maalintan cashar ma qorna. Taabo “Beddel jadwalka” si aad u geliso koorso, saacad iyo goob.":"Maalintan wax jadwal ah ma jiraan."}</div>`;
 }
 function renderScheduleTabs(){
-  document.getElementById("scheduleTabs").innerHTML = DAY_ORDER.map(d=>`<button class="tab-btn" data-day="${d}">${d}</button>`).join("");
+  document.getElementById("scheduleTabs").innerHTML = (ACTIVE_LEVEL==="university"?ALL_DAYS:DAY_ORDER).map(d=>`<button class="tab-btn" data-day="${d}">${d}</button>`).join("");
   document.querySelectorAll(".tab-btn").forEach(b=> b.addEventListener("click", ()=> renderSchedule(b.dataset.day)));
 }
 
@@ -1213,14 +1333,43 @@ function openScheduleEditor(){
   activeScheduleDay=document.querySelector(".tab-btn.active")?.dataset.day || "Sabti";
   document.getElementById("scheduleModalDay").textContent=activeScheduleDay;
   const rows=STATE.schedule[activeScheduleDay];
+  if(ACTIVE_LEVEL==="university"){
+    renderUniversityScheduleEditor(rows);
+    document.getElementById("scheduleModalOverlay").classList.add("open");return;
+  }
   document.getElementById("scheduleEditFields").innerHTML=rows.map((r,i)=>`<div class="form-grid" style="padding:12px 0;border-bottom:1px solid var(--border)"><div class="full" style="font-size:12px;font-weight:800;color:var(--primary)">${PHASE_ICO[r.phase]} ${r.label}</div><label><span class="modal-label" style="margin-top:4px">Maadada</span><select class="select-input sched-subject" data-i="${i}">${STATE.subjects.map(s=>`<option ${s.name===r.subject?'selected':''}>${s.name}</option>`).join('')}<option ${r.free?'selected':''}>Xilli Fasax</option></select></label><label><span class="modal-label" style="margin-top:4px">Saacadda</span><input type="time" class="select-input sched-time" data-i="${i}" value="${r.time||'16:00'}"></label><label class="full"><span class="modal-label" style="margin-top:4px">Faahfaahin</span><input class="select-input sched-note" data-i="${i}" value="${(r.note||'').replace(/"/g,'&quot;')}" placeholder="Tusaale: Dib u eegis"></label></div>`).join('');
   document.getElementById("scheduleModalOverlay").classList.add("open");
+}
+function universityScheduleRow(row={}){
+  const options=STATE.subjects.map(s=>`<option value="${escapeHtml(s.name)}" ${s.name===row.subject?'selected':''}>${escapeHtml(s.name)}</option>`).join("");
+  const div=document.createElement("div");div.className="uni-sched-row form-grid";div.style.cssText="padding:12px 0;border-bottom:1px solid var(--border)";
+  div.dataset.id=row.id||uid("slot");
+  div.innerHTML=`<label><span class="modal-label">Koorso</span><select class="select-input uni-sched-subject">${options}</select></label><label><span class="modal-label">Waqtiga</span><input class="select-input uni-sched-time" type="time" value="${escapeHtml(row.time||"08:00")}"></label><label><span class="modal-label">Nooca casharka</span><input class="select-input uni-sched-label" maxlength="40" value="${escapeHtml(row.label||"Cashar")}" placeholder="Cashar / Lab"></label><label><span class="modal-label">Qolka ama faahfaahin</span><input class="select-input uni-sched-note" maxlength="90" value="${escapeHtml(row.note||"")}" placeholder="Ikhtiyaari"></label><button class="btn btn-ghost uni-remove-slot" type="button">Ka saar casharkan</button>`;
+  div.querySelector(".uni-remove-slot").addEventListener("click",()=>div.remove());return div;
+}
+function renderUniversityScheduleEditor(rows){
+  const fields=document.getElementById("scheduleEditFields");fields.innerHTML="";
+  for(const row of rows)fields.appendChild(universityScheduleRow(row));
+  const add=document.createElement("button");add.className="schedule-edit-btn";add.type="button";add.textContent="＋ Ku dar cashar";add.style.marginTop="14px";
+  add.addEventListener("click",()=>{if(!STATE.subjects.length){alert("Marka hore ku dar koorso.");return;}if(fields.querySelectorAll(".uni-sched-row").length>=12){alert("Maalintii ugu badnaan 12 cashar ayaa la qori karaa.");return;}fields.insertBefore(universityScheduleRow(),add);});
+  fields.appendChild(add);
 }
 function closeScheduleEditor(){document.getElementById("scheduleModalOverlay").classList.remove("open")}
 document.getElementById("editScheduleBtn").addEventListener("click",openScheduleEditor);
 document.getElementById("scheduleCloseBtn").addEventListener("click",closeScheduleEditor);
 document.getElementById("scheduleCancelBtn").addEventListener("click",closeScheduleEditor);
-document.getElementById("scheduleSaveBtn").addEventListener("click",()=>{ const rows=STATE.schedule[activeScheduleDay]; document.querySelectorAll('.sched-subject').forEach(el=>{const r=rows[+el.dataset.i];r.subject=el.value;r.free=el.value==='Xilli Fasax'}); document.querySelectorAll('.sched-time').forEach(el=>rows[+el.dataset.i].time=el.value); document.querySelectorAll('.sched-note').forEach(el=>rows[+el.dataset.i].note=el.value.trim()); saveState();renderSchedule(activeScheduleDay);renderTodayPlan();closeScheduleEditor(); });
+document.getElementById("scheduleSaveBtn").addEventListener("click",()=>{
+  if(ACTIVE_LEVEL==="university"){
+    const rows=[...document.querySelectorAll(".uni-sched-row")].map(el=>({id:el.dataset.id,phase:el.dataset.id,label:el.querySelector(".uni-sched-label").value.trim()||"Cashar",subject:el.querySelector(".uni-sched-subject").value,time:el.querySelector(".uni-sched-time").value,note:el.querySelector(".uni-sched-note").value.trim()}));
+    if(rows.some(r=>!r.subject||!r.time)){alert("Cashar kasta koorso iyo saacad u dooro.");return;}
+    STATE.schedule[activeScheduleDay]=rows.sort((a,b)=>a.time.localeCompare(b.time));
+  }else{
+    const rows=STATE.schedule[activeScheduleDay];document.querySelectorAll('.sched-subject').forEach(el=>{const r=rows[+el.dataset.i];r.subject=el.value;r.free=el.value==='Xilli Fasax'});
+    document.querySelectorAll('.sched-time').forEach(el=>rows[+el.dataset.i].time=el.value);
+    document.querySelectorAll('.sched-note').forEach(el=>rows[+el.dataset.i].note=el.value.trim());
+  }
+  saveState();renderSchedule(activeScheduleDay);renderTodayPlan();closeScheduleEditor();
+});
 
 /* ============================================================
    TODAY'S PLAN — checkable + custom items, persisted
@@ -1233,12 +1382,12 @@ function renderTodayPlan(){
     rowsHtml += STATE.schedule[day].map(r=>{
       const key = day+"-"+r.phase;
       const done = !!STATE.todayPlanChecked[key];
-      const icon = r.free ? "🌙" : PHASE_ICO[r.phase];
-      const label = r.free ? "Xilli Fasax" : r.subject + (r.note ? " · "+r.note : "");
+      const icon = r.free ? "🌙" : PHASE_ICO[r.phase]||"📅";
+      const label = r.free ? "Xilli Fasax" : escapeHtml(r.subject + (r.note ? " · "+r.note : ""));
       return `<div class="plan-row">
         <button class="plan-check ${done?'checked':''}" data-key="${key}">${done?'✓':''}</button>
         <div class="plan-ico">${icon}</div>
-        <div class="plan-text"><div class="plan-phase">${r.label}</div><div class="plan-subject ${done?'done':''}">${label}</div></div>
+        <div class="plan-text"><div class="plan-phase">${escapeHtml(r.label||"Cashar")}</div><div class="plan-subject ${done?'done':''}">${label}</div></div>
       </div>`;
     }).join("");
   } else {
@@ -1249,15 +1398,15 @@ function renderTodayPlan(){
     <div class="plan-row">
       <button class="plan-check ${c.done?'checked':''}" data-custom="${c.id}">${c.done?'✓':''}</button>
       <div class="plan-ico">📝</div>
-      <div class="plan-text"><div class="plan-phase">Dheeraad</div><div class="plan-subject ${c.done?'done':''}">${c.text}</div></div>
+      <div class="plan-text"><div class="plan-phase">Dheeraad</div><div class="plan-subject ${c.done?'done':''}">${escapeHtml(c.text)}</div></div>
       <button class="row-del" data-delcustom="${c.id}">✕</button>
     </div>`).join("");
   box.innerHTML = rowsHtml + `<div class="mini-form"><input type="text" id="planAddInput" class="mini-input" placeholder="Ku dar hawl maanta…"><button class="add-btn" id="planAddBtn">+</button></div>`;
   box.querySelectorAll(".plan-check[data-key]").forEach(b=> b.addEventListener("click", function(){
-    const k=this.dataset.key; STATE.todayPlanChecked[k] = !STATE.todayPlanChecked[k]; saveState(); renderTodayPlan();
+    const k=this.dataset.key;STATE.todayPlanChecked[k] = !STATE.todayPlanChecked[k];if(STATE.todayPlanChecked[k])recordStudyActivity();saveState();renderTodayPlan();
   }));
   box.querySelectorAll(".plan-check[data-custom]").forEach(b=> b.addEventListener("click", function(){
-    const item = STATE.todayPlanCustom.find(c=>c.id===this.dataset.custom); if(item){ item.done=!item.done; saveState(); renderTodayPlan(); }
+    const item = STATE.todayPlanCustom.find(c=>c.id===this.dataset.custom); if(item){ item.done=!item.done;if(item.done)recordStudyActivity(); saveState(); renderTodayPlan(); }
   }));
   box.querySelectorAll("[data-delcustom]").forEach(b=> b.addEventListener("click", function(){
     STATE.todayPlanCustom = STATE.todayPlanCustom.filter(c=>c.id!==this.dataset.delcustom); saveState(); renderTodayPlan();
@@ -1295,7 +1444,7 @@ document.getElementById("timerStartBtn").addEventListener("click", function(){
     this.innerHTML='<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg> Jooji';
     timerHandle=setInterval(()=>{
       timerRemaining--; updateTimerUI();
-      if(timerRemaining<=0){ clearInterval(timerHandle); timerRunning=false; document.getElementById("timerStartBtn").innerHTML='<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg> Bilow'; updateTimerUI(); }
+      if(timerRemaining<=0){ clearInterval(timerHandle);timerRunning=false;recordStudyActivity(); document.getElementById("timerStartBtn").innerHTML='<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg> Bilow'; updateTimerUI(); }
     },1000);
   }
   updateTimerUI();
@@ -1321,24 +1470,24 @@ document.querySelectorAll(".chip-btn").forEach(btn=>{
 =============================================================*/
 function renderExams(){
   const withDays = STATE.exams.map(e=>({...e, time:e.time||"08:00", days:daysUntil(e.date)})).sort((a,b)=>a.days-b.days);
+  const next=withDays.find(e=>e.days>=0);
   const heroBox = document.getElementById("examHero");
-  if(withDays.length===0){
-    heroBox.innerHTML = `<div class="countdown-num">—</div><div class="countdown-label">Wali imtixaan lama qorin</div>`;
+  if(!next){
+    heroBox.innerHTML = `<div class="countdown-num">—</div><div class="countdown-label">Ma jiro imtixaan soo socda</div>`;
   } else {
-    const next = withDays.find(e=>e.days>=0) || withDays[0];
-    heroBox.innerHTML = `<div class="countdown-num">${Math.max(0,next.days)}</div><div class="countdown-label">maalmood oo kaa harsan</div><div class="countdown-sub">${next.subject} — ${next.date}</div>`;
+    heroBox.innerHTML = `<div class="countdown-num">${next.days}</div><div class="countdown-label">maalmood oo kaa harsan</div><div class="countdown-sub">${escapeHtml(next.subject)} · ${escapeHtml(next.date)}</div>`;
   }
   document.getElementById("examList").innerHTML = withDays.map(e=>`
-    <div class="exam-row"><span>${e.subject} · ${e.time}</span><span style="display:flex;align-items:center;gap:6px;"><span class="days-badge">${e.days<0?"Dhacday":e.days+" maalmood"}</span><button class="row-del" data-delexam="${e.id}">✕</button></span></div>
-  `).join("") + `<div class="mini-form"><input type="text" id="examSubjectInput" class="mini-input" placeholder="Maadada"><input type="date" id="examDateInput" class="mini-input mini-date"><input type="time" id="examTimeInput" class="mini-input mini-date" value="08:00" aria-label="Saacadda imtixaanka"><button class="add-btn" id="examAddBtn">+</button></div>`;
+    <div class="exam-row"><span>${escapeHtml(e.subject)} · ${escapeHtml(e.time)}</span><span style="display:flex;align-items:center;gap:6px;"><span class="days-badge">${e.days<0?"Dhacday":e.days+" maalmood"}</span><button class="row-del" data-delexam="${escapeHtml(e.id)}">✕</button></span></div>
+  `).join("") + `<div class="mini-form"><select id="examSubjectInput" class="mini-input" aria-label="Maadada imtixaanka">${STATE.subjects.map(s=>`<option value="${escapeHtml(s.name)}">${escapeHtml(s.name)}</option>`).join("")}</select><input type="date" id="examDateInput" class="mini-input mini-date"><input type="time" id="examTimeInput" class="mini-input mini-date" value="08:00" aria-label="Saacadda imtixaanka"><button class="add-btn" id="examAddBtn" ${STATE.subjects.length?'':'disabled'}>+</button></div>`;
   document.querySelectorAll("[data-delexam]").forEach(b=> b.addEventListener("click", function(){
-    STATE.exams = STATE.exams.filter(x=>x.id!==this.dataset.delexam); saveState(); renderExams(); renderDeadlines(); renderStats();
+    STATE.exams = STATE.exams.filter(x=>x.id!==this.dataset.delexam); saveState(); renderExams(); renderDeadlines(); renderStats();renderUniversitySummary();
   }));
   document.getElementById("examAddBtn").addEventListener("click", ()=>{
     const s=document.getElementById("examSubjectInput"), d=document.getElementById("examDateInput"), t=document.getElementById("examTimeInput");
     if(s.value.trim()===""||!d.value){ return; }
     STATE.exams.push({id:uid("ex"), subject:s.value.trim(), date:d.value, time:t.value||"08:00"});
-    saveState(); renderExams(); renderDeadlines(); renderStats();
+    saveState(); renderExams(); renderDeadlines(); renderStats();renderUniversitySummary();renderCalendar();
   });
 }
 
@@ -1347,28 +1496,45 @@ function renderExams(){
 =============================================================*/
 function renderHomework(){
   const list = document.getElementById("hwList");
-  list.innerHTML = STATE.homework.map((h,i)=>{
+  const selector=document.getElementById("hwSubjectInput");
+  const previous=selector.value;
+  selector.innerHTML=STATE.subjects.map(s=>`<option value="${escapeHtml(s.name)}">${escapeHtml(s.name)}</option>`).join("");
+  if(STATE.subjects.some(s=>s.name===previous))selector.value=previous;
+  document.getElementById("hwAddBtn").disabled=!STATE.subjects.length;
+  list.innerHTML = STATE.homework.length ? STATE.homework.map((h,i)=>{
     const done = h.status==="submitted";
-    const badgeText = h.status==="submitted"?"La Gudbiyay":h.status==="late"?"Dib u Dhacay":"Sugaya";
+    const late=!done&&h.due&&daysUntil(h.due)<0;
+    const badgeText = done?"La Gudbiyay":late?"Dib u Dhacay":"Sugaya";
     return `<div class="hw-row">
       <button class="hw-check ${done?'checked':''}" data-i="${i}" aria-label="Calaamadi">${done?'✓':''}</button>
-      <div class="hw-info"><div class="hw-title ${done?'done':''}">${h.task}</div><div class="hw-meta">${subjIcon(h.subject)} ${h.subject} · Waqtiga: ${h.due}</div></div>
-      <span class="status-badge ${h.status}">${badgeText}</span>
+      <div class="hw-info"><div class="hw-title ${done?'done':''}">${escapeHtml(h.task)}</div><div class="hw-meta">${subjIcon(h.subject)} ${escapeHtml(h.subject)} · Gudbinta: ${escapeHtml(h.due)}</div></div>
+      <span class="status-badge ${done?'submitted':late?'late':'pending'}">${badgeText}</span><button class="modal-close hw-delete" data-i="${i}" type="button" aria-label="Ka saar shaqada">×</button>
     </div>`;
-  }).join("");
+  }).join("") : '<div class="empty-courses">Weli shaqo ma qorna. Ku dar assignment iyo waqtiga gudbinta hoos.</div>';
   list.querySelectorAll(".hw-check").forEach(btn=>{
     btn.addEventListener("click", function(){
       const i = parseInt(this.dataset.i,10);
       STATE.homework[i].status = STATE.homework[i].status==="submitted" ? "pending" : "submitted";
-      saveState(); renderHomework(); renderDeadlines(); renderStats();
+      if(STATE.homework[i].status==="submitted")recordStudyActivity();
+      saveState(); renderHomework(); renderDeadlines(); renderStats();renderUniversitySummary();renderActivities();
     });
   });
+  list.querySelectorAll(".hw-delete").forEach(btn=>btn.addEventListener("click",()=>{
+    if(!confirm("Shaqadan ma ka saaraysaa jadwalkaaga?"))return;
+    STATE.homework.splice(Number(btn.dataset.i),1);saveState();renderHomework();renderDeadlines();renderStats();renderUniversitySummary();
+  }));
   const submitted = STATE.homework.filter(h=>h.status==="submitted").length;
   const pct = STATE.homework.length ? Math.round((submitted/STATE.homework.length)*100) : 0;
   document.getElementById("hwCount").textContent = submitted+"/"+STATE.homework.length+" la gudbiyay";
   document.getElementById("hwPercentText").textContent = pct+"%";
   document.getElementById("hwPercentBar").style.width = pct+"%";
 }
+document.getElementById("hwAddBtn").addEventListener("click",()=>{
+  const task=document.getElementById("hwTaskInput"),subject=document.getElementById("hwSubjectInput"),due=document.getElementById("hwDueInput");
+  if(!task.value.trim()||!subject.value||!due.value){alert("Geli shaqada, maadada iyo maalinta gudbinta.");return;}
+  STATE.homework.push({id:uid("hw"),task:task.value.trim(),subject:subject.value,due:due.value,status:"pending"});
+  task.value="";due.value="";saveState();renderHomework();renderDeadlines();renderStats();renderUniversitySummary();
+});
 
 /* ============================================================
    DEADLINES — add custom / complete / dismiss, persisted
@@ -1554,13 +1720,14 @@ document.getElementById("calNextBtn").addEventListener("click", ()=>{
    ACTIVITIES / NOTIFICATIONS / QUOTES / BADGES
 =============================================================*/
 function renderActivities(){
-  document.getElementById("activityList").innerHTML = ACTIVITIES.map(a=>`
-    <div class="activity-row"><div class="activity-ico">${a.ico}</div><div><div class="activity-text">${a.text}</div><div class="activity-time">${a.time}</div></div></div>`).join("");
+  const done=STATE.homework.filter(h=>h.status==="submitted").slice(-5).reverse();
+  document.getElementById("activityList").innerHTML = done.length ? done.map(h=>`
+    <div class="activity-row"><div class="activity-ico">✅</div><div><div class="activity-text">${escapeHtml(h.task)} · ${escapeHtml(h.subject)}</div><div class="activity-time">La dhammaystiray</div></div></div>`).join("") : '<div class="empty-courses">Weli hawl la dhammaystiray ma jirto.</div>';
 }
 function renderNotifications(){
   const live=(STATE.notificationLog||[]).map(n=>({ico:"🔔",text:n.text,time:n.time}));
-  document.getElementById("notifList").innerHTML = [...live,...NOTIFICATIONS].map(n=>`
-    <div class="notif-item"><div class="notif-ico">${n.ico}</div><div><div class="notif-text">${n.text}</div><div class="notif-time">${n.time}</div></div></div>`).join("");
+  document.getElementById("notifList").innerHTML = live.length?live.map(n=>`
+    <div class="notif-item"><div class="notif-ico">${n.ico}</div><div><div class="notif-text">${escapeHtml(n.text)}</div><div class="notif-time">${escapeHtml(n.time)}</div></div></div>`).join(""):'<div class="notif-item">Weli ogeysiis ma jiro.</div>';
 }
 async function sendAppNotification(title,body){
   if(Notification.permission!=="granted")return;
@@ -1621,36 +1788,42 @@ function renderQuote(){
 }
 document.getElementById("quoteNextBtn").addEventListener("click", ()=>{ quoteIdx=(quoteIdx+1)%QUOTES.length; renderQuote(); });
 function renderBadges(){
-  document.getElementById("badgesGrid").innerHTML = BADGES.map(b=>`
+  const badges=[
+    {emoji:"🔥",name:"7 maalmood oo xiriir ah",unlocked:computeStreak(buildStudyYear())>=7},
+    {emoji:"🎯",name:"Shaqooyinka oo dhan",unlocked:STATE.homework.length>0&&STATE.homework.every(h=>h.status==="submitted")},
+    {emoji:"🏅",name:"Darajo A+",unlocked:STATE.subjects.some(s=>s.grade==="A+")},
+    {emoji:"📚",name:"5 maado oo la dhammeeyay",unlocked:STATE.subjects.filter(s=>s.status==="done").length>=5},
+  ];
+  document.getElementById("badgesGrid").innerHTML = badges.map(b=>`
     <div class="badge-tile ${b.unlocked?'':'locked'}"><div class="badge-emoji">${b.emoji}</div><div class="badge-name">${b.name}</div></div>`).join("");
 }
 
 /* ============================================================
-   STREAK HEATMAP — full year, persisted
+   STREAK HEATMAP — activity completed in this profile
 =============================================================*/
-function generateStreakYear(){
+function buildStudyYear(){
   const days = [];
   const end = new Date(); end.setHours(0,0,0,0);
   for(let i=364;i>=0;i--){
     const d = new Date(end); d.setDate(d.getDate()-i);
-    const dow = d.getDay();
-    const p = (dow===5) ? 0.32 : 0.80;
-    let count = 0;
-    if(Math.random() < p){
-      const r = Math.random();
-      count = r<0.4?1:r<0.7?2:r<0.9?3:4;
-    }
-    days.push({date: fmtDate(d), count});
+    const date=localDateKey(d);
+    days.push({date,count:Math.min(4,Number(STATE.studyLog?.[date])||0)});
   }
   return days;
 }
+function localDateKey(date=new Date()){return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,"0")}-${String(date.getDate()).padStart(2,"0")}`;}
+function recordStudyActivity(){
+  const key=localDateKey();STATE.studyLog[key]=(STATE.studyLog[key]||0)+1;
+  saveState();renderHeatmap();renderBadges();
+}
 function computeStreak(streakYear){
   let n=0;
-  for(let i=streakYear.length-1;i>=0;i--){ if(streakYear[i].count>0) n++; else break; }
+  let i=streakYear.length-1;if(streakYear[i]?.count===0)i--;
+  for(;i>=0;i--){ if(streakYear[i].count>0)n++;else break; }
   return n;
 }
 function renderHeatmap(){
-  const data = STATE.streakYear;
+  const data = buildStudyYear();
   document.getElementById("streakNum").textContent = computeStreak(data);
   const firstDow = new Date(data[0].date+"T00:00:00").getDay();
   const padded = new Array(firstDow).fill(null).concat(data);
@@ -1676,12 +1849,25 @@ function renderHeatmap(){
 /* ============================================================
    INIT
 =============================================================*/
-async function init(){
-  await loadState();
-  const mainCards=document.querySelectorAll(".main-col>.card"),asideCards=document.querySelectorAll(".aside-col>.card");
-  ["home schedule","subjects","subjects","tasks"].forEach((v,i)=>mainCards[i]?.setAttribute("data-app-view",v));
-  ["home plan","plan","tasks","tasks","plan","tasks","plan","plan","home","home","plan","plan"].forEach((v,i)=>asideCards[i]?.setAttribute("data-app-view",v));
-  document.body.dataset.appView="home";
+function renderEducationContext(){
+  const university=ACTIVE_LEVEL==="university";
+  document.body.dataset.level=ACTIVE_LEVEL;
+  document.getElementById("levelSelect").value=ACTIVE_LEVEL;
+  document.getElementById("footClass").textContent="Heerka waxbarashada: "+LEVEL_NAMES[ACTIVE_LEVEL]+(university&&STATE.university.semester?" · "+STATE.university.semester:"");
+  document.getElementById("scheduleTitle").textContent=university?"🗓️ Jadwalka casharrada jaamacadda":"🗓️ Jadwalka Waxbarashada Toddobaadlaha";
+  document.getElementById("subjectsTitle").textContent=university?"🎓 Koorsooyinka":"📚 Maadooyinka";
+  document.getElementById("subjectsSubtitle").textContent=university?"Koorso kasta geli PDF, darajo, progress iyo credit hours":STATE.subjects.length+" maado · guji mid si aad wax uga beddesho";
+  document.getElementById("homeworkTitle").textContent=university?"🧾 Assignments & Xaaladda Gudbinta":"🧾 Shaqooyinka Guriga & Xaaladda Gudbinta";
+  document.getElementById("homeworkSubtitle").textContent=university?"Ku qor assignment-ka, koorsada iyo deadline-ka":"Calaamadi shaqada marka aad dhammaystirto";
+  document.getElementById("examsTitle").textContent=university?"🚩 Imtixaanada Jaamacadda":"🚩 Tirinta Imtixaanada";
+  document.getElementById("examsSubtitle").textContent=university?"La soco quiz, midterm iyo final exam kasta":"Ku dar imtixaannadaada — waa la kaydiyaa";
+  document.getElementById("uniMajor").value=STATE.university.major||"";
+  document.getElementById("uniSemester").value=STATE.university.semester||"";
+  document.title="Hage Study · "+LEVEL_NAMES[ACTIVE_LEVEL];
+  renderUniversitySummary();
+}
+function renderAll(){
+  renderEducationContext();
   renderProfile();
   renderStats();
   renderSubjects();
@@ -1700,17 +1886,39 @@ async function init(){
   renderActivities();
   renderNotifications();
   document.getElementById("switchNotif").classList.toggle("on",STATE.notificationsEnabled&&("Notification" in window)&&Notification.permission==="granted");
+  renderQuote();renderBadges();renderHeatmap();
+}
+async function init(){
+  await loadState();
+  const mainCards=document.querySelectorAll(".main-col>.card"),asideCards=document.querySelectorAll(".aside-col>.card");
+  ["home schedule","subjects","subjects","tasks"].forEach((v,i)=>mainCards[i]?.setAttribute("data-app-view",v));
+  ["home plan","plan","tasks","tasks","plan","tasks","plan","plan","home","home","plan","plan"].forEach((v,i)=>asideCards[i]?.setAttribute("data-app-view",v));
+  document.body.dataset.appView="home";
+  renderAll();
   checkScheduledNotifications();setInterval(checkScheduledNotifications,30000);
   document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible"){checkScheduledNotifications();schedulePushSync();}});
   window.addEventListener("online",schedulePushSync);
   schedulePushSync();
-  renderQuote();
-  renderBadges();
-  renderHeatmap();
   const ls = document.getElementById("loadingScreen");
   if(ls) ls.remove();
 }
 document.addEventListener("DOMContentLoaded", init);
+document.getElementById("levelSelect").addEventListener("change",async function(){
+  const next=this.value;if(next===ACTIVE_LEVEL||!LEVEL_NAMES[next])return;
+  const oldNotifications=STATE.notificationsEnabled;
+  clearTimeout(saveTimer);persistActiveState();
+  if(oldNotifications&&!window.ShacirkaNative?.isNative&&pushActive)await disablePushNotifications();
+  const oldPhoto=STATE.profileImage;
+  ACTIVE_LEVEL=next;
+  STATE=normalizeState(PROFILE_STATES[next]||buildDefaultState(next),next);
+  if(!PROFILE_STATES[next])STATE.profileImage=oldPhoto;
+  PROFILE_STATES[next]=STATE;
+  document.body.dataset.appView="home";document.querySelector('.bottom-nav button[data-view="home"]')?.click();
+  renderAll();persistActiveState();schedulePushSync();
+});
+for(const [field,key] of [["uniMajor","major"],["uniSemester","semester"]]){
+  document.getElementById(field).addEventListener("input",function(){if(ACTIVE_LEVEL!=="university")return;STATE.university[key]=this.value.trim();saveState();if(key==="semester")document.getElementById("footClass").textContent="Heerka waxbarashada: University"+(STATE.university.semester?" · "+STATE.university.semester:"");});
+}
 let deferredInstallPrompt=null;
 window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferredInstallPrompt=e;});
 document.getElementById("installBtn").addEventListener("click",async()=>{ if(deferredInstallPrompt){deferredInstallPrompt.prompt();await deferredInstallPrompt.userChoice;deferredInstallPrompt=null}else document.getElementById("installModalOverlay").classList.add("open"); });
