@@ -900,10 +900,11 @@ function normalizeState(state,level){
 }
 function persistActiveState(){
   PROFILE_STATES[ACTIVE_LEVEL]=STATE;
-  safeStorageSet(PROFILE_STORE_KEY,JSON.stringify(PROFILE_STATES));
+  const saved=safeStorageSet(PROFILE_STORE_KEY,JSON.stringify(PROFILE_STATES));
   safeStorageSet(ACTIVE_LEVEL_KEY,ACTIVE_LEVEL);
   // Keep the original Form 4 key for updates from older installed versions.
   if(ACTIVE_LEVEL==="form4")safeStorageSet(STORAGE_KEY,JSON.stringify(STATE));
+  return saved;
 }
 let saveTimer=null;
 function saveState(){
@@ -1111,7 +1112,9 @@ document.getElementById("courseSaveBtn").addEventListener("click",()=>{
   const name=document.getElementById("courseNameInput").value.trim();
   if(!name||STATE.subjects.some(s=>s.name.toLowerCase()===name.toLowerCase())){alert("Geli magac koorso oo cusub.");return;}
   STATE.subjects.push({id:uid("course"),name,short:name.slice(0,10),sub:"",ico:"📘",credits:Math.min(12,Math.max(1,Number(document.getElementById("courseCreditsInput").value)||3)),lecturer:document.getElementById("courseLecturerInput").value.trim(),room:document.getElementById("courseRoomInput").value.trim(),courseNotes:"",resources:[],attendance:{attended:0,total:0},progress:0,grade:"—",status:"new"});
-  saveState();renderSubjects();renderStats();renderChart();renderHomework();renderUniversitySummary();closeCourseModal();
+  clearTimeout(saveTimer);
+  if(!persistActiveState()){STATE.subjects.pop();alert("Koorsada lama kaydin. Hubi in kaydka browser-ka/app-ka uu shaqeynayo.");return;}
+  schedulePushSync();renderSubjects();renderStats();renderChart();renderHomework();renderUniversitySummary();closeCourseModal();
 });
 document.getElementById("deleteCourseBtn").addEventListener("click",async()=>{
   if(ACTIVE_LEVEL!=="university"||editingIndex===null)return;
@@ -1349,6 +1352,18 @@ function renderScheduleTabs(){
 }
 
 let activeScheduleDay="Sabti";
+function timeToMinutes(value){
+  const [hours,minutes]=String(value||"").split(":").map(Number);
+  return Number.isFinite(hours)&&Number.isFinite(minutes)?hours*60+minutes:null;
+}
+function getScheduleConflicts(rows){
+  const sorted=(rows||[]).filter(row=>row.time).map(row=>{
+    const start=timeToMinutes(row.time),end=timeToMinutes(row.endTime);
+    return {...row,start,end:end!==null?end:start+60};
+  }).sort((a,b)=>a.start-b.start),conflicts=[];
+  for(let i=1;i<sorted.length;i++)if(sorted[i].start<sorted[i-1].end)conflicts.push([sorted[i-1],sorted[i]]);
+  return conflicts;
+}
 function openScheduleEditor(){
   activeScheduleDay=document.querySelector(".tab-btn.active")?.dataset.day || "Sabti";
   document.getElementById("scheduleModalDay").textContent=activeScheduleDay;
@@ -1390,7 +1405,9 @@ document.getElementById("scheduleSaveBtn").addEventListener("click",()=>{
     document.querySelectorAll('.sched-time').forEach(el=>rows[+el.dataset.i].time=el.value);
     document.querySelectorAll('.sched-note').forEach(el=>rows[+el.dataset.i].note=el.value.trim());
   }
-  saveState();renderSchedule(activeScheduleDay);renderTodayPlan();closeScheduleEditor();
+  clearTimeout(saveTimer);
+  if(!persistActiveState()){alert("Jadwalka lama kaydin. Hubi in kaydka browser-ka/app-ka uu shaqeynayo.");return;}
+  schedulePushSync();renderSchedule(activeScheduleDay);renderTodayPlan();closeScheduleEditor();
 });
 
 /* ============================================================
