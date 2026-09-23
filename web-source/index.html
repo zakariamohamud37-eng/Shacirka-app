@@ -650,15 +650,15 @@ body[data-level]:not([data-level="university"]) .university-workspace{display:no
       <div><div class="modal-title" id="modalSubjName">—</div><div class="modal-sub" id="modalSubjSub">—</div></div>
       <button class="modal-close" id="modalCloseBtn" aria-label="Xir">✕</button>
     </div>
-    <label class="modal-label">Horumarka (%)</label>
+    <label class="modal-label" for="modalProgressRange">Horumarka (%)</label>
     <input type="range" min="0" max="100" step="1" id="modalProgressRange" class="range-input">
     <div class="modal-range-value" id="modalProgressValue">0%</div>
-    <label class="modal-label">Darajada</label>
+    <label class="modal-label" for="modalGradeSelect">Darajada</label>
     <select id="modalGradeSelect" class="select-input">
       <option value="—">Weli lama qiimeyn</option><option>A+</option><option>A</option><option>A-</option><option>B+</option><option>B</option><option>B-</option><option>C+</option><option>C</option><option>C-</option><option>D</option>
     </select>
-    <label class="modal-label">Heerka Waxbarashada</label>
-    <div class="segmented" id="modalStatusSeg">
+    <div class="modal-label" id="modalStatusLabel">Heerka Waxbarashada</div>
+    <div class="segmented" id="modalStatusSeg" role="group" aria-labelledby="modalStatusLabel">
       <button data-v="new" type="button">Aan la Bilaabin</button>
       <button data-v="progress" type="button">Socda</button>
       <button data-v="done" type="button">La Dhammeeyay</button>
