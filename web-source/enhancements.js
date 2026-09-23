@@ -1,7 +1,7 @@
 (function(){
 "use strict";
 
-const ENHANCEMENT_VERSION="1.5.0";
+const ENHANCEMENT_VERSION="1.5.1";
 const PDF_READING_KEY="hage-study-pdf-reading-v1";
 const ONBOARDING_KEY="hage-study-onboarding-v1.5";
 const ERROR_LOG_KEY="hage-study-error-log-v1";
