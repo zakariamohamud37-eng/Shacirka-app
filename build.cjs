@@ -11,9 +11,12 @@ const esbuild=require('esbuild');
   fs.copyFileSync('native-glue.js','www/native-glue.js');
   fs.copyFileSync('web-source/enhancements.css','www/enhancements.css');
   fs.copyFileSync('web-source/enhancements.js','www/enhancements.js');
+  fs.copyFileSync('web-source/ai-chat.css','www/ai-chat.css');
   fs.copyFileSync('node_modules/pdfjs-dist/legacy/build/pdf.worker.min.js','www/pdf.worker.min.js');
   await Promise.all([
     esbuild.build({entryPoints:['native.js'],bundle:true,format:'iife',outfile:'www/native.js'}),
-    esbuild.build({entryPoints:['pdf-engine.js'],bundle:true,format:'iife',outfile:'www/pdf-engine.js'})
+    esbuild.build({entryPoints:['pdf-engine.js'],bundle:true,format:'iife',outfile:'www/pdf-engine.js'}),
+    esbuild.build({entryPoints:['auth-client.js'],bundle:true,minify:true,format:'iife',outfile:'www/auth-client.bundle.js'}),
+    esbuild.build({entryPoints:['ai-chat.js'],bundle:true,minify:true,format:'iife',outfile:'www/ai-chat.bundle.js'})
   ]);
 })().catch(e=>{console.error(e);process.exitCode=1});

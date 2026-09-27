@@ -1,10 +1,11 @@
 (function(){
 "use strict";
 
-const ENHANCEMENT_VERSION="1.5.2";
-const PDF_READING_KEY="hage-study-pdf-reading-v1";
-const ONBOARDING_KEY="hage-study-onboarding-v1.5";
-const ERROR_LOG_KEY="hage-study-error-log-v1";
+const ENHANCEMENT_VERSION="1.6.0";
+const ENH_USER_SCOPE=(()=>{try{return localStorage.getItem("hage-auth-user-id")||"guest"}catch(e){return "guest"}})();
+const PDF_READING_KEY="hage-study-pdf-reading-v1:"+ENH_USER_SCOPE;
+const ONBOARDING_KEY="hage-study-onboarding-v1.6:"+ENH_USER_SCOPE;
+const ERROR_LOG_KEY="hage-study-error-log-v1:"+ENH_USER_SCOPE;
 const GPA_POINTS={"A+":4,"A":4,"A-":3.7,"B+":3.3,"B":3,"B-":2.7,"C+":2.3,"C":2,"C-":1.7,"D":1,"F":0};
 let currentPdfKey="",currentPdfSearchResults=[];
 

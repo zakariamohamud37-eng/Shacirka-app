@@ -20,6 +20,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="enhancements.css">
+<link rel="stylesheet" href="ai-chat.css">
 <style>
 :root{
   --bg-a:#EEF4FF; --bg-b:#F8FAFF;
@@ -824,8 +825,9 @@ const ICO_TREND='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stro
 /* ============================================================
    PERSISTENT STATE (window.storage, personal / not shared)
 =============================================================*/
-const STORAGE_KEY = "shacirka-dashboard-state-v1";
-const PROFILE_STORE_KEY = "hage-study-profiles-v1",ACTIVE_LEVEL_KEY="hage-study-level-v1";
+const USER_SCOPE=(()=>{try{return localStorage.getItem("hage-auth-user-id")||"guest"}catch(e){return "guest"}})();
+const STORAGE_KEY = "shacirka-dashboard-state-v1:"+USER_SCOPE;
+const PROFILE_STORE_KEY = "hage-study-profiles-v1:"+USER_SCOPE,ACTIVE_LEVEL_KEY="hage-study-level-v1:"+USER_SCOPE;
 let PROFILE_STATES = {}, ACTIVE_LEVEL = "form4";
 let STATE = null;
 
@@ -955,7 +957,7 @@ async function pdfDbAction(mode,action){
   const db=await openPdfDb();
   return new Promise((resolve,reject)=>{const tx=db.transaction(PDF_STORE,mode),store=tx.objectStore(PDF_STORE),req=action(store);req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error);tx.oncomplete=()=>db.close();});
 }
-function pdfStorageKey(subject){const item=STATE.subjects.find(s=>s.name===subject);return ACTIVE_LEVEL+"::"+(item?.id||subject);}
+function pdfStorageKey(subject){const item=STATE.subjects.find(s=>s.name===subject);return USER_SCOPE+"::"+ACTIVE_LEVEL+"::"+(item?.id||subject);}
 async function getSubjectPdf(subject){
   const scoped=pdfStorageKey(subject);
   let record=await pdfDbAction("readonly",store=>store.get(scoped));
@@ -1971,5 +1973,7 @@ if ("serviceWorker" in navigator) {
 }
 </script>
 <script src="enhancements.js"></script>
+<script src="auth-client.bundle.js"></script>
+<script src="ai-chat.bundle.js"></script>
 </body>
 </html>
