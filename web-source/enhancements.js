@@ -1,7 +1,7 @@
 (function(){
 "use strict";
 
-const ENHANCEMENT_VERSION="1.6.0";
+const ENHANCEMENT_VERSION="1.7.0";
 const ENH_USER_SCOPE=(()=>{try{return localStorage.getItem("hage-auth-user-id")||"guest"}catch(e){return "guest"}})();
 const PDF_READING_KEY="hage-study-pdf-reading-v1:"+ENH_USER_SCOPE;
 const ONBOARDING_KEY="hage-study-onboarding-v1.6:"+ENH_USER_SCOPE;
@@ -83,6 +83,30 @@ function getScheduleConflicts(rows){
 }
 function countScheduleConflicts(){if(ACTIVE_LEVEL!=="university")return 0;return Object.values(STATE.schedule).reduce((n,rows)=>n+getScheduleConflicts(rows).length,0)}
 
+function createDailyAttendance(){
+  let card=document.getElementById("dailyAttendanceCard");
+  if(!card){
+    card=document.createElement("section");card.id="dailyAttendanceCard";card.className="card daily-attendance-card";card.dataset.appView="home";
+    card.innerHTML=`<div class="daily-attendance-head"><div><div class="card-title">Imaanshaha Maalinlaha</div><div class="card-sub" id="dailyAttendanceDate"></div></div><div class="daily-attendance-percent" id="dailyAttendancePercent">—</div></div>
+      <p class="daily-attendance-question">Maanta wax ma diyaarisay ama waxbarashadaada ma qabatay?</p>
+      <div class="daily-attendance-actions"><button type="button" data-daily-attendance="present"><span>✓</span> Joogay</button><button type="button" data-daily-attendance="absent"><span>–</span> Maqnaa</button></div>
+      <div class="daily-attendance-summary" id="dailyAttendanceSummary"></div><div class="daily-attendance-days" id="dailyAttendanceDays" aria-label="14-kii maalmood ee ugu dambeeyey"></div>`;
+    const anchor=document.querySelector(".university-workspace")||document.querySelector(".layout");anchor?.parentNode.insertBefore(card,anchor);
+    card.querySelectorAll("[data-daily-attendance]").forEach(button=>button.addEventListener("click",()=>{STATE.dailyAttendance ||= {};STATE.dailyAttendance[fmtDate(new Date())]=button.dataset.dailyAttendance;saveState();renderDailyAttendance();toast(button.dataset.dailyAttendance==="present"?"Maanta waxaa lagu diiwaangeliyey: Joogay.":"Maanta waxaa lagu diiwaangeliyey: Maqnaa.")}));
+  }
+  return card;
+}
+function renderDailyAttendance(){
+  const card=createDailyAttendance();if(!card||!STATE)return;STATE.dailyAttendance ||= {};
+  const today=fmtDate(new Date()),todayStatus=STATE.dailyAttendance[today],rows=Object.entries(STATE.dailyAttendance).filter(([,value])=>value==="present"||value==="absent"),present=rows.filter(([,value])=>value==="present").length,total=rows.length,pct=total?Math.round(present/total*100):0;
+  document.getElementById("dailyAttendanceDate").textContent=new Date().toLocaleDateString("so-SO",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+  document.getElementById("dailyAttendancePercent").textContent=total?pct+"%":"Cusub";
+  document.getElementById("dailyAttendanceSummary").innerHTML=`<span><strong>${present}</strong> Joogay</span><span><strong>${Math.max(0,total-present)}</strong> Maqnaa</span><span><strong>${total}</strong> Maalmood</span>`;
+  card.querySelectorAll("[data-daily-attendance]").forEach(button=>button.classList.toggle("selected",button.dataset.dailyAttendance===todayStatus));
+  const days=[];for(let i=13;i>=0;i--){const date=new Date();date.setHours(12,0,0,0);date.setDate(date.getDate()-i);const key=fmtDate(date),status=STATE.dailyAttendance[key]||"none";days.push(`<div class="daily-day ${status}" title="${date.toLocaleDateString("so-SO")}"><span>${["Ax","Is","Ta","Ar","Kh","Ji","Sa"][date.getDay()]}</span><i></i></div>`)}
+  document.getElementById("dailyAttendanceDays").innerHTML=days.join("");
+}
+
 async function updateStorageSummary(){
   const el=document.getElementById("storageSummary");if(!el)return;
   try{const estimate=await navigator.storage?.estimate?.();if(!estimate){el.textContent="Kaydka qalabkan lama cabbiri karo.";return}const pct=estimate.quota?Math.round(estimate.usage/estimate.quota*100):0;el.textContent=`Kaydka app-ka: ${formatStorage(estimate.usage)} / ${formatStorage(estimate.quota)} (${pct}%)`;}
@@ -155,7 +179,7 @@ function renderCourseResources(){
   if(ACTIVE_LEVEL!=="university"||editingIndex===null)return;const s=STATE.subjects[editingIndex],box=document.getElementById("modalCourseResources");if(box)box.value=(s.resources||[]).join("\n");const notes=document.getElementById("modalCourseNotes");if(notes)notes.value=s.courseNotes||"";const att=s.attendance||{attended:0,total:0};document.getElementById("modalAttendanceText").textContent=`${att.attended} / ${att.total} · ${att.total?Math.round(att.attended/att.total*100):0}%`;
   const links=document.getElementById("courseResourceLinks");links.replaceChildren();(s.resources||[]).forEach((value,i)=>{try{const u=new URL(value);if(!/^https?:$/.test(u.protocol))return;const a=document.createElement("a");a.href=u.href;a.target="_blank";a.rel="noopener noreferrer";a.textContent=`Resource ${i+1}`;a.title=u.href;links.appendChild(a)}catch(e){}});
 }
-function refresh(){normalizeUniversityCourses();renderUniversityPro();updateStorageSummary();professionalizeTitles();improveAccessibility()}
+function refresh(){normalizeUniversityCourses();renderUniversityPro();renderDailyAttendance();updateStorageSummary();professionalizeTitles();improveAccessibility()}
 function logError(error,context="app"){
   try{const rows=safeParse(localStorage.getItem(ERROR_LOG_KEY),[]);rows.unshift({time:new Date().toISOString(),context,message:String(error?.message||error)});localStorage.setItem(ERROR_LOG_KEY,JSON.stringify(rows.slice(0,20)))}catch(e){}
 }
@@ -196,5 +220,5 @@ document.getElementById("modalPdfInput")?.addEventListener("change",async functi
 
 const switchObserver=new MutationObserver(syncSwitchAria);document.querySelectorAll(".switch").forEach(el=>switchObserver.observe(el,{attributes:true,attributeFilter:["class"]}));
 document.addEventListener("DOMContentLoaded",()=>{const wait=()=>{if(typeof STATE==="object"&&STATE){refresh();showOnboarding(false)}else setTimeout(wait,50)};wait()});
-window.HageEnhancements={refresh,renderUniversityPro,updateStorageSummary,version:ENHANCEMENT_VERSION};
+window.HageEnhancements={refresh,renderUniversityPro,renderDailyAttendance,updateStorageSummary,version:ENHANCEMENT_VERSION};
 })();

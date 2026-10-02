@@ -852,6 +852,7 @@ function buildDefaultState(level="form4"){
     profileImage: null,
     notificationsEnabled: false,
     notificationLog: [],
+    dailyAttendance: {},
   };
 }
 /* Faylkan wuxuu u shaqeeyaa browser caadi ah (isku-keyd — localStorage),
@@ -875,7 +876,7 @@ async function loadState(){
   ACTIVE_LEVEL=LEVEL_NAMES[safeStorageGet(ACTIVE_LEVEL_KEY)]?safeStorageGet(ACTIVE_LEVEL_KEY):"form4";
   STATE=normalizeState(PROFILE_STATES[ACTIVE_LEVEL]||buildDefaultState(ACTIVE_LEVEL),ACTIVE_LEVEL);
   PROFILE_STATES[ACTIVE_LEVEL]=STATE;
-  saveState();
+  persistActiveState();
 }
 function normalizeState(state,level){
   if(!state||typeof state!=="object"||Array.isArray(state))state=buildDefaultState(level);
@@ -886,6 +887,7 @@ function normalizeState(state,level){
   if(!state.schedule||typeof state.schedule!=="object")state.schedule=clone(def.schedule);
   if(!state.university||typeof state.university!=="object")state.university={major:"",semester:""};
   if(!state.studyLog||typeof state.studyLog!=="object")state.studyLog={};
+  if(!state.dailyAttendance||typeof state.dailyAttendance!=="object"||Array.isArray(state.dailyAttendance))state.dailyAttendance={};
   if(level!=="university"){
     for(const [i,s] of state.subjects.entries()){
       const name=SCHOOL_NAME_MAP[s.name]||s.name;
@@ -911,7 +913,7 @@ function persistActiveState(){
 let saveTimer=null;
 function saveState(){
   clearTimeout(saveTimer);
-  saveTimer = setTimeout(()=>{ persistActiveState();schedulePushSync(); }, 250);
+  saveTimer = setTimeout(()=>{ persistActiveState();schedulePushSync();window.HageCloudSync?.schedule(); }, 250);
 }
 
 /* Profile photo, resized before local storage so it remains fast on phones. */
@@ -1974,6 +1976,7 @@ if ("serviceWorker" in navigator) {
 </script>
 <script src="enhancements.js"></script>
 <script src="auth-client.bundle.js"></script>
+<script src="data-sync.bundle.js"></script>
 <script src="ai-chat.bundle.js"></script>
 </body>
 </html>

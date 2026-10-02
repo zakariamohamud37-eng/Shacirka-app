@@ -2,7 +2,7 @@
   "name": "Hage Study | Dashboard-ka Ardayga",
   "short_name": "Hage Study",
   "id": "./",
-  "description": "Hage Study: jadwalka iyo maadooyinka waxbarashada",
+  "description": "Hage Study: qorsheynta, waxbarashada iyo kaaliyahaaga Hage AI",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
