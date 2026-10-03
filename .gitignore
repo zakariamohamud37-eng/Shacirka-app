@@ -1,2 +1,10 @@
-# Google App Engine generated folder
-appengine-generated/
+node_modules/
+www/
+android/.gradle/
+android/local.properties
+android/app/build/
+ios/DerivedData/
+*.keystore
+*.jks
+*.p12
+*.mobileprovision
