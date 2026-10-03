@@ -4,7 +4,7 @@ import {App} from '@capacitor/app';
 import {Browser} from '@capacitor/browser';
 import {remindersFor} from './reminders';
 
-const UPDATE_MANIFEST='https://shacirka-dashboard.netlify.app/version.json';
+const UPDATE_MANIFEST='https://hage-study-app.netlify.app/version.json';
 let queue=Promise.resolve();
 const run=fn=>{queue=queue.catch(()=>{}).then(fn);return queue;};
 const cancel=async()=>{const {notifications}=await N.getPending();if(notifications.length)await N.cancel({notifications});};

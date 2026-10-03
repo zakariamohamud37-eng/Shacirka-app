@@ -2,7 +2,7 @@
   "appId": "app.shacirka.dashboard",
   "appName": "Hage Study",
   "webDir": "www",
-  "server": {"url":"https://shacirka-dashboard.netlify.app","cleartext":false},
+  "server": {"url":"https://hage-study-app.netlify.app","cleartext":false},
   "backgroundColor": "#0F1E3C",
   "plugins": {"LocalNotifications":{"iconColor":"#0F1E3C"}}
 }
